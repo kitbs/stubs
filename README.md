@@ -8,7 +8,49 @@ A package to create files & folders with variables
 composer require dillingham/stubs
 ```
 
-### Overview
+### Variables
+
+Variables are declared as an associative array
+
+The `key` is referenced between brackets {{key}}
+
+```php
+[
+    'name' => 'User',
+    'plural' => 'Users',
+    'lower' => 'user',
+]
+```
+
+becomes: {{name}} {{plural}} {{lower}}
+
+### Usage
+
+Simply declare the  source and output and which variables to parse.
+```php
+use Stub\Stub;
+```
+
+```php
+Stub::source('/folder')->output('/folder')->parse($variables);
+```
+```php
+Stub::source('/folder/file.php')->output('/folder')->parse($variables);
+```
+```php
+Stub::source('/folder')
+    ->output(function($path, $content){
+        // called for every parsed file
+    })->parse($variables);
+```
+```php
+Stub::source('/folder/file.php')
+    ->output(function($path, $content){
+        // called for the single file
+    })->parse($variables);
+```
+
+### Examples
 
 
 Folder names
@@ -54,46 +96,4 @@ controllers/{{name}}Controller.php.stub
 ```
 ```
 controllers/UsersController.php
-```
-
-### Variables
-
-Variables are declared as an associative array
-
-The `key` is referenced between brackets {{key}}
-
-```php
-[
-    'name' => 'User',
-    'plural' => 'Users',
-    'lower' => 'user',
-]
-```
-
-becomes: {{name}} {{plural}} {{lower}}
-
-### Usage
-
-Simply declare the  source and output and which variables to parse.
-```php
-use Stub\Stub;
-```
-
-```php
-Stub::source('/folder')->output('/folder')->parse($variables);
-```
-```php
-Stub::source('/folder/file.php')->output('/folder')->parse($variables);
-```
-```php
-Stub::source('/folder')
-    ->output(function($path, $content){
-        // called for every parsed file
-    })->parse($variables);
-```
-```php
-Stub::source('/folder/file.php')
-    ->output(function($path, $content){
-        // called for the single file
-    })->parse($variables);
 ```
