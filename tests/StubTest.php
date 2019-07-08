@@ -3,7 +3,6 @@
 namespace Tests;
 
 use Stub\Stub;
-use Illuminate\Support\Str;
 
 class StubTest extends TestCase
 {
