@@ -37,6 +37,7 @@ class StubTest extends TestCase
             ->output(function ($path, $content) {
                 $this->assertContains('User', $path);
                 $this->assertContains('User', $content);
+                $this->assertNotContains('stubs', $path);
             })->parse(['name' => 'User', 'lower' => 'user']);
     }
 

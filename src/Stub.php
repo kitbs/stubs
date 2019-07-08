@@ -57,11 +57,11 @@ class Stub
 
     protected function handleOutput($path, $content)
     {
+        $path = $this->getBasePath($path);
+
         if (is_callable(($this->output))) {
             return ($this->output)($path, $content);
         }
-
-        $path = $this->getUniqueFolderStructure($path);
 
         if (!file_exists($this->folder($path))) {
             mkdir($this->folder($path), 0777, true);
@@ -101,7 +101,7 @@ class Stub
         return implode(DIRECTORY_SEPARATOR, $segments);
     }
 
-    public function getUniqueFolderStructure($path)
+    public function getBasePath($path)
     {
         $filepath_parts = explode(DIRECTORY_SEPARATOR, $path);
         $folder_parts = explode(DIRECTORY_SEPARATOR, self::$path);
@@ -113,6 +113,10 @@ class Stub
         }
 
         $filepath = join(DIRECTORY_SEPARATOR, $filepath_parts);
+
+        if (is_callable($this->output)) {
+            return $filepath;
+        }
 
         return rtrim($this->output, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $filepath;
     }
