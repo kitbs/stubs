@@ -1,6 +1,6 @@
 {
     "name": "dillingham/stubs",
-    "description": "php stub resolver",
+    "description": "Create files, folders & content with variables",
     "keywords": ["php", "stub"],
     "license": "MIT",
     "require": {
