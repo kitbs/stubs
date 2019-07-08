@@ -10,12 +10,13 @@ composer require dillingham/stubs
 
 ### Overview
 
-Place variables, using this syntax {{variable}} in:
 
 Folder names
 
 ```
 views/{{plural}}/index.blade.php
+```
+```
 views/users/index.blade.php
 ```
 
@@ -23,13 +24,15 @@ File names
 
 ```
 controllers/{{name}}Controller.php
+```
+```
 controllers/UserController.php
 ```
 
 File content
 
 ```php
-class {{user}}Controller
+class {{name}}Controller
 {
     // create {{plural}}
     public function create() {}
@@ -48,6 +51,8 @@ You can also append `.stub` to avoid IDE errors
 
 ```
 controllers/{{name}}Controller.php.stub
+```
+```
 controllers/UsersController.php
 ```
 
@@ -55,7 +60,7 @@ controllers/UsersController.php
 
 Variables are declared as an associative array
 
-The key is referenced  between brackets {{key}}
+The `key` is referenced between brackets {{key}}
 
 ```php
 [
@@ -64,6 +69,8 @@ The key is referenced  between brackets {{key}}
     'lower' => 'user',
 ]
 ```
+
+becomes: {{name}} {{plural}} {{lower}}
 
 ### Usage
 
