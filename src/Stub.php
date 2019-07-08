@@ -41,7 +41,7 @@ class Stub
     public function parseFile()
     {
         $this->handleOutput(
-            $this->resolvedPath(self::$path),
+            $this->resolvedPath(basename(self::$path)),
             $this->resolvedContent(self::$path)
        );
     }
