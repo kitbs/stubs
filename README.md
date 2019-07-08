@@ -1,6 +1,10 @@
-# Stubs
+# 📂 Stubs
 
-A package to create files & folders with variables
+[![Build Status](https://travis-ci.com/dillingham/stubs.svg?branch=master)](https://travis-ci.com/dillingham/stubs)
+[![Latest Version on Github](https://img.shields.io/github/release/dillingham/stubs.svg?style=flat-square)](https://packagist.org/packages/dillingham/stubs)
+[![Total Downloads](https://img.shields.io/packagist/dt/dillingham/stubs?style=flat-square)](https://packagist.org/packages/dillingham/stubs)
+
+A package to create files, folders & content with variables
 
 ### Install
 
