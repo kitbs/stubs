@@ -15,7 +15,7 @@ class StubTest extends TestCase
 
         $this->assertFileExists(__DIR__.'/output/User.php');
         $this->assertFileExists(__DIR__.'/output/folder/UserFactory.php');
-        $this->assertFileExists(__DIR__.'/output/user-folder/Example.php');
+        $this->assertFileExists(__DIR__.'/output/User-folder/Example.php');
         $this->assertFileExists(__DIR__.'/output/folder/another-folder/UserController.php');
 
         $this->assertEquals('User is present', file_get_contents(__DIR__.'/output/User.php'));
