@@ -73,7 +73,7 @@ class Stub
     protected function resolvedPath($path)
     {
         $path = str_replace('.stub', '', $path);
-        $path = ltrim($path, '/');
+        $path = ltrim($path, DIRECTORY_SEPARATOR);
 
         return $this->variables($path);
     }
