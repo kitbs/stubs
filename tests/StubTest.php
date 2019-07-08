@@ -45,8 +45,8 @@ class StubTest extends TestCase
     {
         Stub::source(__DIR__.'/stubs/{{name}}.php.stub')
             ->output(function ($path, $content) {
-                $this->assertContains('User', $path);
-                $this->assertContains('User', $content);
+                $this->assertEquals('User.php', $path);
+                $this->assertEquals('User is present', $content);
             })->parse(['name' => 'User', 'lower' => 'user']);
     }
 
