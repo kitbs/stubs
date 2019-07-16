@@ -116,8 +116,14 @@ class Stub
             $path = $this->folder($path);
         }
 
+        $target_path = self::$path;
+
+        if (!$this->fileOutput && self::$method == 'parseFile') {
+            $target_path = dirname($target_path);
+        }
+
         $filepath_parts = explode(DIRECTORY_SEPARATOR, $path);
-        $folder_parts = explode(DIRECTORY_SEPARATOR, self::$path);
+        $folder_parts = explode(DIRECTORY_SEPARATOR, $target_path);
 
         $common = array_intersect_assoc($filepath_parts, $folder_parts);
 
