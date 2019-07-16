@@ -31,6 +31,17 @@ class StubTest extends TestCase
         $this->assertEquals('User is present', file_get_contents(__DIR__.'/output/User.php'));
     }
 
+    public function testVariablesInOutputStubbing()
+    {
+        Stub::source(__DIR__.'/stubs/{{name}}.php.stub')
+            ->output(__DIR__.'/output/{{lower}}')
+            ->parse(['name' => 'User', 'lower' => 'user']);
+
+        $this->assertFileExists(__DIR__.'/output/user/User.php');
+
+        $this->assertEquals('User is present', file_get_contents(__DIR__.'/output/user/User.php'));
+    }
+
     public function testDirectoryToCallbackStubbing()
     {
         Stub::source(__DIR__.'/stubs/')
