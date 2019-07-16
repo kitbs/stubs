@@ -4,7 +4,7 @@
 [![Latest Version on Github](https://img.shields.io/github/release/dillingham/stubs.svg?style=flat-square)](https://packagist.org/packages/dillingham/stubs)
 [![Total Downloads](https://img.shields.io/packagist/dt/dillingham/stubs.svg?style=flat-square)](https://packagist.org/packages/dillingham/stubs)
 
-A package to create files, folders & content with variables. 
+A package to create files, folders and content with variables. 
 
 ### Install
 
@@ -14,9 +14,9 @@ composer require dillingham/stubs
 
 ### Variables
 
-Variables are declared as an associative array
+Variables are declared as an associative array.
 
-The `key` is referenced between brackets {{key}}
+The `key` is referenced in the file paths and contents between brackets, as `{{key}}`.
 
 ```php
 [
@@ -26,38 +26,58 @@ The `key` is referenced between brackets {{key}}
 ]
 ```
 
-becomes: {{name}} {{plural}} {{lower}}
+becomes `{{name}}` `{{plural}}` `{{lower}}`.
 
 ### Usage
 
-Simply declare the  source and output and which variables to parse.
+Simply declare the source and output and which variables to parse.
 ```php
 use Stub\Stub;
 ```
+#### Copy the contents of one folder to another folder
+```php
+Stub::source('stubs')->output('output')->parse($variables);
+```
 
+#### Copy one file to a folder
 ```php
-Stub::source('/folder')->output('/folder')->parse($variables);
+Stub::source('stubs/file.php')->output('output')->parse($variables);
+```
+
+#### Copy one file to another file
+```php
+Stub::source('stubs/file.php')->output('output/newfile.php', true)->parse($variables);
+```
+
+#### Use variables in the output path
+```php
+Stub::source('stubs/file.php')->output('output/{{name}}')->parse($variables);
 ```
 ```php
-Stub::source('/folder/file.php')->output('/folder')->parse($variables);
+Stub::source('stubs/file.php')->output('output/{{name}}/newfile.php', true)->parse($variables);
 ```
+
+#### Process the contents of a folder and send the results to a callback
 ```php
-Stub::source('/folder')
-    ->output(function($path, $content){
+Stub::source('stubs')
+    ->output(function($path, $content) {
         // called for every parsed file
     })->parse($variables);
 ```
+You must store each file yourself in the callback.
+
+#### Process one file and send the results to a callback
 ```php
-Stub::source('/folder/file.php')
-    ->output(function($path, $content){
+Stub::source('stubs/file.php')
+    ->output(function($path, $content) {
         // called for the single file
     })->parse($variables);
 ```
+You must store the file yourself in the callback.
 
 ### Example [view](https://github.com/dillingham/stubs/tree/master/tests/stubs)
 
-
-Folder names
+#### Folder names
 
 ```
 views/{{plural}}/index.blade.php
@@ -66,7 +86,7 @@ views/{{plural}}/index.blade.php
 views/users/index.blade.php
 ```
 
-File names
+#### File names
 
 ```
 controllers/{{name}}Controller.php
@@ -75,7 +95,7 @@ controllers/{{name}}Controller.php
 controllers/UserController.php
 ```
 
-File content
+#### File content
 
 ```php
 class {{name}}Controller
@@ -93,7 +113,7 @@ class UserController
 }
 ```
 
-You can also append `.stub` to avoid IDE errors
+You can also append `.stub` to avoid IDE errors:
 
 ```
 controllers/{{name}}Controller.php.stub
