@@ -8,6 +8,7 @@ use RecursiveDirectoryIterator;
 class Stub
 {
     public $output;
+    public $fileOutput;
     public static $path;
     public static $method;
     public $variables = [];
@@ -21,9 +22,16 @@ class Stub
         return new self;
     }
 
-    public function output($path)
+    public function output($path, $isFile = false)
     {
+        if (self::$method == 'parseDirectory' && $isFile) {
+            throw new \InvalidArgumentException('Argument $isFile passed to Stub\Stub::output() must not be true if argument $path is a directory');
+        } elseif (is_callable($path) && $isFile) {
+            throw new \InvalidArgumentException('Argument $isFile passed to Stub\Stub::output() must not be true if argument $path is callable');
+        }
+        
         $this->output = $path;
+        $this->fileOutput = $isFile;
 
         return $this;
     }
@@ -41,7 +49,7 @@ class Stub
     public function parseFile()
     {
         $this->handleOutput(
-            $this->resolvedPath(basename(self::$path)),
+            $this->resolvedPath(self::$path),
             $this->resolvedContent(self::$path)
        );
     }
@@ -63,8 +71,10 @@ class Stub
             return ($this->output)($path, $content);
         }
 
-        if (!file_exists($this->folder($path))) {
-            mkdir($this->folder($path), 0777, true);
+        $folder = $this->folder($path);
+
+        if ($folder && !file_exists($folder)) {
+            mkdir($folder, 0777, true);
         }
 
         return file_put_contents($path, $content);
@@ -73,7 +83,6 @@ class Stub
     protected function resolvedPath($path)
     {
         $path = str_replace('.stub', '', $path);
-        $path = ltrim($path, DIRECTORY_SEPARATOR);
 
         return $this->variables($path);
     }
@@ -103,10 +112,14 @@ class Stub
 
     public function getBasePath($path)
     {
+        if ($this->fileOutput && self::$method == 'parseFile') {
+            $path = $this->folder($path);
+        }
+
         $filepath_parts = explode(DIRECTORY_SEPARATOR, $path);
         $folder_parts = explode(DIRECTORY_SEPARATOR, self::$path);
 
-        $common = array_intersect($filepath_parts, $folder_parts);
+        $common = array_intersect_assoc($filepath_parts, $folder_parts);
 
         foreach ($common as $index => $segment) {
             unset($filepath_parts[$index]);
@@ -118,7 +131,7 @@ class Stub
             return $filepath;
         }
 
-        return rtrim($this->variables($this->output), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $filepath;
+        return rtrim($this->variables($this->output), DIRECTORY_SEPARATOR) . ($filepath ? DIRECTORY_SEPARATOR . $filepath : null);
     }
 
     protected function files()
