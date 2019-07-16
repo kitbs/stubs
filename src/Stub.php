@@ -118,7 +118,7 @@ class Stub
             return $filepath;
         }
 
-        return rtrim($this->output, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $filepath;
+        return rtrim($this->variables($this->output), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $filepath;
     }
 
     protected function files()
