@@ -7,12 +7,45 @@ use RecursiveDirectoryIterator;
 
 class Stub
 {
+    /**
+     * The output path.
+     * @var string
+     */
     public $output;
-    public $fileOutput;
+
+    /**
+     * Whether the output is a single file.
+     * @var bool
+     */
+    public $fileOutput = false;
+
+    /**
+     * The source path.
+     *
+     * @var string
+     */
     public static $path;
+
+    /**
+     * The method that will be used to parse the source path.
+     *
+     * @var string
+     */
     public static $method;
+
+    /**
+     * The variables passed to the process.
+     *
+     * @var array
+     */
     public $variables = [];
 
+    /**
+     * Set the source path and start a new process.
+     *
+     * @param  string $path The source path.
+     * @return self
+     */
     public static function source($path)
     {
         self::$path = $path;
@@ -22,6 +55,13 @@ class Stub
         return new self;
     }
 
+    /**
+     * Set the output directory.
+     *
+     * @param  string  $path   The directory or file path to output the files.
+     * @param  bool $isFile Whether the path provided is a single filename.
+     * @return self
+     */
     public function output($path, $isFile = false)
     {
         if (self::$method == 'parseDirectory' && $isFile) {
@@ -29,13 +69,17 @@ class Stub
         } elseif (is_callable($path) && $isFile) {
             throw new \InvalidArgumentException('Argument $isFile passed to Stub\Stub::output() must not be true if argument $path is callable');
         }
-        
+
         $this->output = $path;
         $this->fileOutput = $isFile;
 
         return $this;
     }
 
+    /**
+     * Parse a directory recursively and handle the output.
+     * @return void
+     */
     public function parseDirectory()
     {
         foreach ($this->files() as $file) {
@@ -46,6 +90,11 @@ class Stub
         }
     }
 
+    /**
+     * Parse a single file and handle the output.
+     *
+     * @return void
+     */
     public function parseFile()
     {
         $this->handleOutput(
@@ -54,16 +103,39 @@ class Stub
        );
     }
 
-    public function parse($variables)
+    /**
+     * Set the variables to replace in the output files.
+     *
+     * @param  array $variables The variables to replace in the output files.
+     *
+     * @return self
+     */
+    public function variables(array $variables)
     {
         $this->variables = $variables;
 
+        return $this;
+    }
+
+    /**
+     * Run the output process.
+     *
+     * @return self
+     */
+    public function run()
+    {
         $this->{self::$method}();
 
         return $this;
     }
 
-    protected function handleOutput($path, $content)
+    /**
+     * Handle the output of a file.
+     * @param  string $path    The file path to process.
+     * @param  string $content The content of the file.
+     * @return bool
+     */
+    protected function handleOutput(string $path, string $content)
     {
         $path = $this->getBasePath($path);
 
@@ -77,22 +149,43 @@ class Stub
             mkdir($folder, 0777, true);
         }
 
-        return file_put_contents($path, $content);
+        return (bool) file_put_contents($path, $content);
     }
 
-    protected function resolvedPath($path)
+    /**
+     * Resolve a path by replacing any variables.
+     *
+     * @param  string $path The path to resolve.
+     *
+     * @return string
+     */
+    protected function resolvedPath(string $path)
     {
         $path = str_replace('.stub', '', $path);
 
-        return $this->variables($path);
+        return $this->replaceVariables($path);
     }
 
-    protected function resolvedContent($path)
+    /**
+     * Resolve a file's content by replacing any variables.
+     *
+     * @param  string $path The file path
+     *
+     * @return string
+     */
+    protected function resolvedContent(string $path)
     {
-        return $this->variables(file_get_contents($path));
+        return $this->replaceVariables(file_get_contents($path));
     }
 
-    protected function variables($content = "")
+    /**
+     * Replace the variables in the string.
+     *
+     * @param  string $content The content to replace variables in.
+     *
+     * @return string
+     */
+    protected function replaceVariables(string $content)
     {
         foreach ($this->variables as $key => $value) {
             $content = str_replace("{{{$key}}}", $value, $content);
@@ -101,7 +194,14 @@ class Stub
         return $content;
     }
 
-    protected function folder($path)
+    /**
+     * Get the folder of a file path.
+     *
+     * @param  string $path The file path
+     *
+     * @return string
+     */
+    protected function folder(string $path)
     {
         $segments = explode(DIRECTORY_SEPARATOR, $path);
 
@@ -110,7 +210,14 @@ class Stub
         return implode(DIRECTORY_SEPARATOR, $segments);
     }
 
-    public function getBasePath($path)
+    /**
+     * Get the base path of a file path.
+     *
+     * @param  string $path The file path
+     *
+     * @return string
+     */
+    public function getBasePath(string $path)
     {
         if ($this->fileOutput && self::$method == 'parseFile') {
             $path = $this->folder($path);
@@ -137,10 +244,17 @@ class Stub
             return $filepath;
         }
 
-        return rtrim($this->variables($this->output), DIRECTORY_SEPARATOR) . ($filepath ? DIRECTORY_SEPARATOR . $filepath : null);
+        return rtrim($this->replaceVariables($this->output), DIRECTORY_SEPARATOR) . ($filepath ? DIRECTORY_SEPARATOR . $filepath : null);
     }
 
-    protected function files()
+    /**
+     * The files to be processed.
+     *
+     * @param  bool $resolved Whether the paths should be resolved
+     *
+     * @return array
+     */
+    public function files($resolved = false)
     {
         $files = [];
 
@@ -152,7 +266,13 @@ class Stub
 
         foreach ($iterator as $file) {
             if (!$file->isDir()) {
-                $files[] = $file->getPathname();
+                 $filepath = $file->getPathname();
+
+                 if ($resolved) {
+                     $filepath = $this->resolvedPath($filepath);
+                 }
+
+                 $files[] = $filepath;
             }
         }
 
