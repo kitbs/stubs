@@ -48,7 +48,7 @@ class Stub
      */
     public static function source($path)
     {
-        self::$path = $path;
+        self::$path = static::realPath($path);
 
         self::$method = (is_dir($path)) ? 'parseDirectory' : 'parseFile';
 
@@ -70,7 +70,7 @@ class Stub
             throw new \InvalidArgumentException('Argument $isFile passed to Stub\Stub::output() must not be true if argument $path is callable');
         }
 
-        $this->output = $path;
+        $this->output = static::realPath($path);
         $this->fileOutput = $isFile;
 
         return $this;
@@ -277,5 +277,36 @@ class Stub
         }
 
         return $files;
+    }
+
+    /**
+     * Expand the real path even if it does not exist.
+     *
+     * @link Adapted from https://www.php.net/manual/en/function.realpath.php#84012
+     *
+     * @param  string $path The path to expand.
+     *
+     * @return string
+     */
+    protected static function realPath(string $path)
+    {
+        $path = preg_replace('@[/\\\\]+@', DIRECTORY_SEPARATOR, $path);
+
+        $parts = explode(DIRECTORY_SEPARATOR, $path);
+
+        $absolutes = array();
+
+        foreach ($parts as $part) {
+
+            if ('.' == $part) continue;
+
+            if ('..' == $part) {
+                array_pop($absolutes);
+            } else {
+                $absolutes[] = $part;
+            }
+        }
+
+        return implode(DIRECTORY_SEPARATOR, $absolutes);
     }
 }
