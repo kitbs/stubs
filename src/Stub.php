@@ -288,6 +288,17 @@ class Stub
     {
         $files = [];
 
+        if (self::$method == 'parseFile') {
+
+            $filepath = self::$path;
+            
+            if ($resolved) {
+                $filepath = $this->resolvedPath($filepath);
+            }
+
+            return $filepath;
+        }
+
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator(
                 self::$path
