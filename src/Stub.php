@@ -131,11 +131,13 @@ class Stub
 
     /**
      * Handle the output of a file.
+     *
      * @param  string $path    The file path to process.
-     * @param  string $content The content of the file.
+     * @param  string|null $content The content of the file.
+     *
      * @return bool
      */
-    protected function handleOutput(string $path, string $content)
+    protected function handleOutput(string $path, string $content = null)
     {
         $path = $this->getBasePath($path);
 
@@ -171,9 +173,9 @@ class Stub
      *
      * @param  string $path The file path
      *
-     * @return string
+     * @return string|null
      */
-    protected function resolvedContent(string $path)
+    protected function resolvedContent(string $path = null)
     {
         return $this->replaceVariables(file_get_contents($path));
     }
@@ -181,11 +183,11 @@ class Stub
     /**
      * Replace the variables in the string.
      *
-     * @param  string $content The content to replace variables in.
+     * @param  string|null $content The content to replace variables in.
      *
      * @return string
      */
-    protected function replaceVariables(string $content)
+    protected function replaceVariables(string $content = null)
     {
         foreach ($this->variables as $key => $value) {
             $content = str_replace("{{{$key}}}", $value, $content);
