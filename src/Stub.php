@@ -9,36 +9,44 @@ class Stub
 {
     /**
      * The output path.
-     * @var string
+     *
+     * @var string|callable
      */
-    public $output;
+    protected $output;
+
+    /**
+     * The callback to call after each successful file is generated.
+     *
+     * @var callable|null
+     */
+    protected $listener;
 
     /**
      * Whether the output is a single file.
      * @var bool
      */
-    public $fileOutput = false;
+    protected $fileOutput = false;
 
     /**
      * The source path.
      *
      * @var string
      */
-    public static $path;
+    protected static $path;
 
     /**
      * The method that will be used to parse the source path.
      *
      * @var string
      */
-    public static $method;
+    protected static $method;
 
     /**
      * The variables passed to the process.
      *
      * @var array
      */
-    public $variables = [];
+    protected $variables = [];
 
     /**
      * Set the source path and start a new process.
@@ -118,6 +126,20 @@ class Stub
     }
 
     /**
+     * Set the listener callback to call after each file is generated.
+     *
+     * @param  callable $listener The callback to call after each file is generated.
+     *
+     * @return self
+     */
+    public function listen(callable $listener)
+    {
+        $this->listener = $listener;
+
+        return $this;
+    }
+
+    /**
      * Run the output process.
      *
      * @return self
@@ -151,7 +173,13 @@ class Stub
             mkdir($folder, 0777, true);
         }
 
-        return (bool) file_put_contents($path, $content);
+        $success = (bool) file_put_contents($path, $content);
+
+        if (is_callable(($this->listener))) {
+            ($this->listener)($path, $content, $success);
+        }
+
+        return $success;
     }
 
     /**
@@ -171,9 +199,9 @@ class Stub
     /**
      * Resolve a file's content by replacing any variables.
      *
-     * @param  string $path The file path
+     * @param  string|null $path The file path.
      *
-     * @return string|null
+     * @return string
      */
     protected function resolvedContent(string $path = null)
     {
@@ -199,7 +227,7 @@ class Stub
     /**
      * Get the folder of a file path.
      *
-     * @param  string $path The file path
+     * @param  string $path The file path.
      *
      * @return string
      */
@@ -215,7 +243,7 @@ class Stub
     /**
      * Get the base path of a file path.
      *
-     * @param  string $path The file path
+     * @param  string $path The file path.
      *
      * @return string
      */
@@ -252,7 +280,7 @@ class Stub
     /**
      * The files to be processed.
      *
-     * @param  bool $resolved Whether the paths should be resolved
+     * @param  bool $resolved Whether the paths should be resolved.
      *
      * @return array
      */
