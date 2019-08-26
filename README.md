@@ -4,7 +4,9 @@
 [![Latest Version on Github](https://img.shields.io/github/release/dillingham/stubs.svg?style=flat-square)](https://packagist.org/packages/dillingham/stubs)
 [![Total Downloads](https://img.shields.io/packagist/dt/dillingham/stubs.svg?style=flat-square)](https://packagist.org/packages/dillingham/stubs)
 
-A package to create files, folders and content with variables. 
+A package to create files, folders and content with variables.
+
+[Jump to CLI Section](https://github.com/dillingham/stubs#command-line-interface)
 
 ### Install
 
@@ -120,4 +122,37 @@ controllers/{{name}}Controller.php.stub
 ```
 ```
 controllers/UsersController.php
+```
+
+
+### Command Line Interface
+This stubs package call also be used as a CLI tool.
+It comes with a `parse` command to perform the above examples.
+
+Composer install this package globally:
+
+```bash
+composer global require dillingham/stubs
+```
+
+You can pass variables to `stubs` like so:
+
+```bash
+stub parse ./source ./output key:value key:value key:"value with spaces"
+```
+
+For many or more complex variable sets, pass a json file path:
+
+```bash
+stub parse ./source ./output values.json
+```
+
+Example of the json file content:
+
+```json
+{
+    "name": "Brian Dillingham",
+    "email": "brian@dillingham.dev",
+    "title": "Programmer"
+}
 ```
