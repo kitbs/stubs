@@ -12,6 +12,8 @@ class Stub
     public static $path;
     public static $method;
     public $variables = [];
+    public $openTag = '{{';
+    public $closeTag = '}}';
 
     public static function source($path)
     {
@@ -95,7 +97,7 @@ class Stub
     protected function variables($content = "")
     {
         foreach ($this->variables as $key => $value) {
-            $content = str_replace("{{{$key}}}", $value, $content);
+            $content = str_replace("{$this->openTag}{$key}{$this->closeTag}", $value, $content);
         }
 
         return $content;
@@ -157,5 +159,13 @@ class Stub
         }
 
         return $files;
+    }
+
+    public function usingTags($open, $close)
+    {
+        $this->openTag = $open;
+        $this->closeTag = $close;
+
+        return $this;
     }
 }
