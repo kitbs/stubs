@@ -68,56 +68,7 @@ Stub::source('stubs')
 ```
 You must handle/store file(s) yourself in the callback.
 
-Useful if you don't want to store the output..
-
-But instead maybe want to send output to an API etc
-
-#### Usecase example [view](https://github.com/dillingham/stubs/tree/master/tests/stubs)
-
-#### Folder names
-
-```
-views/{{plural}}/index.blade.php
-```
-```
-views/users/index.blade.php
-```
-
-#### File names
-
-```
-controllers/{{name}}Controller.php
-```
-```
-controllers/UserController.php
-```
-
-#### File content
-
-```php
-class {{name}}Controller
-{
-    // create {{plural}}
-    public function create() {}
-}
-```
-
-```php
-class UserController
-{
-    // create users
-    public function create() {}
-}
-```
-
-You can also append `.stub` to avoid IDE errors:
-
-```
-controllers/{{name}}Controller.php.stub
-```
-```
-controllers/UsersController.php
-```
+### Usecase example [view](https://github.com/dillingham/stubs/tree/master/tests/stubs)
 
 
 ## Command Line Interface
