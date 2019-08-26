@@ -139,7 +139,11 @@ class Stub
             return $filepath;
         }
 
-        return rtrim($this->variables($this->output), DIRECTORY_SEPARATOR) . ($filepath ? DIRECTORY_SEPARATOR . $filepath : null);
+    public function orderKeysByCharacterLength($array)
+    {
+        $keys = array_map('strlen', array_keys($array));
+        array_multisort($keys, SORT_DESC, $array);
+        return $array;
     }
 
     protected function files()
