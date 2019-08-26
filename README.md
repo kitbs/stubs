@@ -8,10 +8,14 @@ A package to create files, folders and content with variables.
 
 [Jump to CLI Section](https://github.com/dillingham/stubs#command-line-interface)
 
-### Install
+### Installation
 
 ```
 composer require dillingham/stubs
+```
+or install globally to use the cli:
+```
+composer global require dillingham/stubs
 ```
 
 ### Variables
@@ -29,6 +33,19 @@ The `key` is referenced in the file paths and contents between brackets, as `{{k
 ```
 
 becomes `{{name}}` `{{plural}}` `{{lower}}`.
+
+### Variable Placement
+
+Variables can be in filepaths, filenames & in the content
+
+```
+/views/{{name}}/index.blade.php
+```
+```
+<buton>Create {{name}}</button>
+```
+
+For a basic example, [click here](https://github.com/dillingham/stubs/tree/master/tests/stubs)
 
 ### Usage
 
@@ -68,8 +85,6 @@ Stub::source('stubs')
 ```
 You must handle/store file(s) yourself in the callback.
 
-### Usecase example [view](https://github.com/dillingham/stubs/tree/master/tests/stubs)
-
 
 ## Command Line Interface
 
@@ -85,7 +100,7 @@ composer global require dillingham/stubs
 You can pass variables to `stubs` like so:
 
 ```bash
-stub parse ./source ./output key:value key:value key:"value with spaces"
+stub parse ./source ./output key:value key:"value with spaces"
 ```
 
 For many or more complex variable sets, pass a json file path:
