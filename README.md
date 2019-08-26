@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.com/dillingham/stubs.svg?branch=master)](https://travis-ci.com/dillingham/stubs)
 [![Latest Version on Github](https://img.shields.io/github/release/dillingham/stubs.svg?style=flat-square)](https://packagist.org/packages/dillingham/stubs)
-[![Total Downloads](https://img.shields.io/packagist/dt/dillingham/stubs.svg?style=flat-square)](https://packagist.org/packages/dillingham/stubs)
+[![Total Downloads](https://img.shields.io/packagist/dt/dillingham/stubs.svg?style=flat-square)](https://packagist.org/packages/dillingham/stubs) [![Twitter Follow](https://img.shields.io/twitter/follow/dillinghammm?color=%231da1f1&label=Twitter&logo=%231da1f1&logoColor=%231da1f1&style=flat-square)](https://twitter.com/dillinghammm)
 
 A package to create files, folders and content with variables.
 
@@ -63,21 +63,16 @@ Stub::source('stubs/file.php')->output('output/{{name}}/newfile.php', true)->par
 ```php
 Stub::source('stubs')
     ->output(function($path, $content) {
-        // called for every parsed file
+        // called when file(s) parsed
     })->parse($variables);
 ```
-You must store each file yourself in the callback.
+You must handle/store file(s) yourself in the callback.
 
-#### Process one file and send the results to a callback
-```php
-Stub::source('stubs/file.php')
-    ->output(function($path, $content) {
-        // called for the single file
-    })->parse($variables);
-```
-You must store the file yourself in the callback.
+Useful if you don't want to store the output..
 
-### Example [view](https://github.com/dillingham/stubs/tree/master/tests/stubs)
+But instead maybe want to send output to an API etc
+
+#### Usecase example [view](https://github.com/dillingham/stubs/tree/master/tests/stubs)
 
 #### Folder names
 
