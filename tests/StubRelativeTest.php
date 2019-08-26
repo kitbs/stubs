@@ -14,7 +14,7 @@ class StubRelativeTest extends TestCase
 
         $this->assertFileExists('output/User.php');
         $this->assertFileExists('output/folder/UserFactory.php');
-        $this->assertFileExists('output/User-folder/Example.php');
+        $this->assertFileExists('output/User/Example.php');
         $this->assertFileExists('output/folder/another-folder/UserController.php');
 
         $this->assertEquals('User is present', file_get_contents('output/User.php'));

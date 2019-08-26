@@ -14,7 +14,7 @@ class StubTest extends TestCase
 
         $this->assertFileExists(__DIR__.'/output/User.php');
         $this->assertFileExists(__DIR__.'/output/folder/UserFactory.php');
-        $this->assertFileExists(__DIR__.'/output/User-folder/Example.php');
+        $this->assertFileExists(__DIR__.'/output/User/Example.php');
         $this->assertFileExists(__DIR__.'/output/folder/another-folder/UserController.php');
 
         $this->assertEquals('User is present', file_get_contents(__DIR__.'/output/User.php'));
@@ -46,17 +46,17 @@ class StubTest extends TestCase
     {
         $this->expectExceptionMessage('Argument $isFile passed to Stub\Stub::output() must not be true if argument $path is a directory');
 
-        Stub::source(__DIR__.'/stubs/{{name}}-folder')
+        Stub::source(__DIR__.'/stubs/{{name}}')
             ->output(__DIR__.'/output/ExampleUser.php', true)
             ->parse(['name' => 'User', 'lower' => 'user']);
-        
+
         $this->assertFileNotExists(__DIR__.'/output/ExampleUser.php');
     }
 
     public function testDirectoryToFileStubbingDoesNotCreateFiles()
     {
         try {
-            Stub::source(__DIR__.'/stubs/{{name}}-folder')
+            Stub::source(__DIR__.'/stubs/{{name}}')
                 ->output(__DIR__.'/output/ExampleUser.php', true)
                 ->parse(['name' => 'User', 'lower' => 'user']);
         } catch (\Exception $e) {
@@ -121,12 +121,12 @@ class StubTest extends TestCase
         $this->expectExceptionMessage('Argument $isFile passed to Stub\Stub::output() must not be true if argument $path is callable');
 
         $attemptedOutput = false;
-        
+
         Stub::source(__DIR__.'/stubs/{{name}}.php.stub')
             ->output(function ($path, $content) use (&$attemptedOutput) {
                 $attemptedOutput = true;
             }, true)->parse(['name' => 'User', 'lower' => 'user']);
-        
+
         $this->assertFalse($attemptedOutput, 'Failed asserting that the output callback was not called.');
     }
 
