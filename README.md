@@ -55,25 +55,35 @@ use Stub\Stub;
 ```
 #### Copy the contents of one folder to another folder
 ```php
-Stub::source('stubs')->output('output')->parse($variables);
+Stub::source('stubs')
+    ->output('output')
+    ->parse($variables);
 ```
 
 #### Copy one file to a folder
 ```php
-Stub::source('stubs/file.php')->output('output')->parse($variables);
+Stub::source('stubs/file.php')
+    ->output('output')
+    ->parse($variables);
 ```
 
 #### Copy one file to another file
 ```php
-Stub::source('stubs/file.php')->output('output/newfile.php', true)->parse($variables);
+Stub::source('stubs/file.php')
+    ->output('output/newfile.php', true)
+    ->parse($variables);
 ```
 
 #### Use variables in the output path
 ```php
-Stub::source('stubs/file.php')->output('output/{{name}}')->parse($variables);
+Stub::source('stubs/file.php')
+    ->output('output/{{name}}')
+    ->parse($variables);
 ```
 ```php
-Stub::source('stubs/file.php')->output('output/{{name}}/newfile.php', true)->parse($variables);
+Stub::source('stubs/file.php')
+    ->output('output/{{name}}/newfile.php', true)
+    ->parse($variables);
 ```
 
 #### Process the contents of a folder and send the results to a callback
