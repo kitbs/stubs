@@ -125,11 +125,11 @@ controllers/UsersController.php
 ```
 
 
-# Command Line Interface
-This stubs package call also be used as a CLI tool.
+## Command Line Interface
 
-It comes with a `parse` command to perform the above examples.
+Perform the same behavior described above from the command line
 
+---
 Composer install this package globally:
 
 ```bash
