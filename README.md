@@ -127,6 +127,7 @@ controllers/UsersController.php
 
 # Command Line Interface
 This stubs package call also be used as a CLI tool.
+
 It comes with a `parse` command to perform the above examples.
 
 Composer install this package globally:
