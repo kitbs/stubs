@@ -31,7 +31,7 @@ class Stub
         } elseif (is_callable($path) && $isFile) {
             throw new \InvalidArgumentException('Argument $isFile passed to Stub\Stub::output() must not be true if argument $path is callable');
         }
-        
+
         $this->output = $path;
         $this->fileOutput = $isFile;
 
@@ -124,20 +124,27 @@ class Stub
             $target_path = dirname($target_path);
         }
 
-        $filepath_parts = explode(DIRECTORY_SEPARATOR, $path);
-        $folder_parts = explode(DIRECTORY_SEPARATOR, $target_path);
-
-        $common = array_intersect_assoc($filepath_parts, $folder_parts);
-
-        foreach ($common as $index => $segment) {
-            unset($filepath_parts[$index]);
-        }
-
-        $filepath = join(DIRECTORY_SEPARATOR, $filepath_parts);
+        $filepath = $this->unsetCommonPaths($path, $target_path);
 
         if (is_callable($this->output)) {
             return $filepath;
         }
+
+        return rtrim($this->variables($this->output), DIRECTORY_SEPARATOR) . ($filepath ? DIRECTORY_SEPARATOR . $filepath : null);
+    }
+
+    public function unsetCommonPaths($string1, $string2)
+    {
+        $array1 = explode(DIRECTORY_SEPARATOR, $string1);
+        $array2 = explode(DIRECTORY_SEPARATOR, $string2);
+        $common = array_intersect_assoc($array1, $array2);
+
+        foreach ($common as $index => $segment) {
+            unset($array1[$index]);
+        }
+
+        return join(DIRECTORY_SEPARATOR, $array1);
+    }
 
     public function orderKeysByCharacterLength($array)
     {
