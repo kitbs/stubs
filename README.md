@@ -6,9 +6,9 @@
 
 A package to create files, folders and content with variables.
 
-[PHP Class](https://github.com/dillingham/stubs#usage) | [Standalone CLI](https://github.com/dillingham/stubs#command-line-interface) | [Laravel Support](https://github.com/dillingham/stubs#laravel-support)
+[PHP Class](https://github.com/dillingham/stubs#usage) | [Standalone CLI](https://github.com/dillingham/stubs#standalone-cli) | [Laravel Support](https://github.com/dillingham/stubs#laravel-support)
 
-### Installation
+## Installation
 
 ```
 composer require dillingham/stubs
@@ -18,7 +18,7 @@ or install globally to use the cli:
 composer global require dillingham/stubs
 ```
 
-### Variables
+#### Variables
 
 Variables are declared as an associative array.
 
@@ -34,7 +34,7 @@ The `key` is referenced in the file paths and contents between brackets, as `{{k
 
 becomes `{{name}}` `{{plural}}` `{{lower}}`.
 
-### Variable Placement
+#### Variable Placement
 
 Variables can be in file paths, file names and in the content:
 
@@ -47,7 +47,7 @@ Variables can be in file paths, file names and in the content:
 
 For a basic example, [click here](https://github.com/dillingham/stubs/tree/master/tests/stubs).
 
-### Render stubs
+## Render stubs
 
 Simply declare the source and output and which variables to render.
 
@@ -93,7 +93,7 @@ The `listen()` callback is called *after* each file has already been created.
 
 This may be used to log or output the results of the process.
 
-### Create stubs
+## Create stubs
 
 #### Convert existing files into stubs for future use:
 ```php
@@ -115,7 +115,7 @@ This may be used to log or output the results of the process.
 
 ---
 
-## Command Line Interface
+# Standalone CLI
 
 > Perform the same behavior described above from the command line
 
@@ -154,7 +154,7 @@ stub init
 
 ---
 
-## Laravel Support
+# Laravel Support
 
 > Use artisan commands & facades along with methods demonstrated above
 
