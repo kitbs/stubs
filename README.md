@@ -42,19 +42,19 @@ use Stub\Stub;
 
 #### Variables
 
-Variables are declared as an associative array.
+In `render()`, variables are declared as `'variable' => 'value'`
 
-The `key` is referenced in the file paths and contents between brackets, as `{{key}}`.
+The `key` can be referenced between brackets, as `{{key}}`.
 
 ```php
 [
-    'name' => 'User',
+    'resource' => 'User',
     'plural' => 'Users',
     'lower' => 'user',
 ]
 ```
 
-becomes `{{name}}` `{{plural}}` `{{lower}}`.
+becomes `{{name}}` `{{plural}}` `{{lower}}` in the stubs.
 
 #### Variable Placement
 
@@ -100,6 +100,8 @@ This may be used to log or output the results of the process.
 
 ## Create stubs
 
+
+
 #### Convert existing files into stubs for future use:
 ```php
 (new Stub)
@@ -110,6 +112,8 @@ This may be used to log or output the results of the process.
         'user' => 'lower'
     ]);
 ```
+
+Note the reverse order in the variable array: `Users` becomes `{{name}}`
 
 - Renders all files & folders in `project`
 - Replaces `Users` with `{{name}}`
