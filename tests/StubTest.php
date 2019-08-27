@@ -11,7 +11,7 @@ class StubTest extends TestCase
         (new Stub)
             ->source(__DIR__.'/stubs/stub-1')
             ->output(__DIR__.'/project')
-            ->parse(['name' => 'User', 'lower_plural' => 'users']);
+            ->render(['name' => 'User', 'lower_plural' => 'users']);
 
         $this->assertFileExists(__DIR__.'/project/User.php');
         $this->assertEquals(
@@ -30,7 +30,7 @@ class StubTest extends TestCase
         (new Stub)
             ->source(__DIR__.'/stubs/stub-2')
             ->output(__DIR__.'/project')
-            ->parse(['name' => 'User', 'lower_plural' => 'users']);
+            ->render(['name' => 'User', 'lower_plural' => 'users']);
 
         $this->assertFileExists(__DIR__.'/project/views/users/index.blade.php');
         $this->assertEquals(
@@ -48,7 +48,7 @@ class StubTest extends TestCase
                 $this->assertContains('User', $content);
                 $this->assertNotContains('stubs', $path);
                 $this->assertNotContains(getcwd(), $path);
-            })->parse(['name' => 'User']);
+            })->render(['name' => 'User']);
     }
 
     public function testRelativeDirectoryToDirectoryStubbing()
@@ -56,7 +56,7 @@ class StubTest extends TestCase
         (new Stub)
             ->source('stubs/stub-1')
             ->output('project')
-            ->parse(['name' => 'User', 'lower' => 'user']);
+            ->render(['name' => 'User', 'lower' => 'user']);
 
         $this->assertFileExists(__DIR__.'/project/User.php');
         $this->assertEquals(

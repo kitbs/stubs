@@ -27,7 +27,7 @@ class Stub
         return $this;
     }
 
-    public function parse($variables)
+    public function render($variables)
     {
         $this->variables = $variables;
 
@@ -46,7 +46,7 @@ class Stub
         }
 
         $this->usingTags('', '');
-        $this->parse($variables);
+        $this->render($variables);
     }
 
     protected function handleOutput($path, $content)

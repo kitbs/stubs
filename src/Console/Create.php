@@ -27,19 +27,19 @@ class Create extends Command
         $output = $i->getArgument('output');
         $variables = $i->getArgument('variables');
 
-        $parse = [];
+        $render = [];
 
         if (count($variables) == 1 && file_exists($variables[0])) {
-            $parse = json_decode(file_get_contents($variables[0]), true);
+            $render = json_decode(file_get_contents($variables[0]), true);
         } else {
             foreach ($variables as $index => $keyValue) {
                 $keyValue = explode(':', $keyValue);
-                $parse[$keyValue[0]] = $keyValue[1];
+                $render[$keyValue[0]] = $keyValue[1];
             }
         }
 
-        (new Stub)->source($source)->output($output)->parse($parse);
+        (new Stub)->source($source)->output($output)->create($render);
 
-        $o->writeLn('<info>Stub success!</info>');
+        $o->writeLn('<info>Stub created!</info>');
     }
 }
