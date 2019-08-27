@@ -63,6 +63,8 @@ use Stub\Stub;
     ->render($variables);
 ```
 
+`render()` returns the count of created files
+
 #### Process a folder and send the files to a callback:
 ```php
 (new Stub)
@@ -71,7 +73,12 @@ use Stub\Stub;
         // called for each rendered file, INSTEAD of creating it
     })->render($variables);
 ```
-**You must handle/store file(s) yourself in the callback.** This may be used to modify the file's path or contents further before you store it.
+
+**You must handle/store file(s) yourself in the callback.** 
+
+This may be used to modify the file's path or contents before you store it.
+
+You can even send to an API, imagine stubbing a github repository.
 
 #### Process a folder and listen to all created files with a callback:
 ```php
@@ -82,9 +89,10 @@ use Stub\Stub;
         // called for each rendered file, AFTER it is created
     })->render($variables);
 ```
-Unlike the `output()` callback above, the `listen()` callback is called *after* each file has already been created. This may be used to log or output the results of the process.
 
-The `render()` and `create()` methods return the number of files which were created by the process, which you can also log or output.
+The `listen()` callback is called *after* each file has already been created.
+
+This may be used to log or output the results of the process.
 
 ### Create stubs
 
@@ -103,6 +111,9 @@ The `render()` and `create()` methods return the number of files which were crea
 - Replaces `Users` with `{{name}}`
 - Replaces `user` with `{{lower}}`
 - Appends `.stub` to filenames (Avoids IDE errors)
+
+`create()` returns the count of created files
+
 ---
 
 ## Command Line Interface
