@@ -1,6 +1,6 @@
 <?php
 
-namespace Stub\Providers;
+namespace Stub\Laravel;
 
 use Stub\Console\Parse;
 use Stub\Console\Create;

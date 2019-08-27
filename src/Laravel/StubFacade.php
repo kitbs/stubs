@@ -1,5 +1,7 @@
 <?php
 
+namespace Stub\Laravel;
+
 use Stub\Stub;
 use \Illuminate\Support\Facades\Facade;
 
