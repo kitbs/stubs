@@ -77,7 +77,9 @@ For a basic example, [click here](https://github.com/dillingham/stubs/tree/maste
 (new Stub)
     ->source('stubs/stub-2')
     ->output(function(string $path, string $content) {
+    
         // called for each rendered file, INSTEAD of creating it
+        
     })->render($variables);
 ```
 
@@ -92,7 +94,9 @@ You must handle/store file(s) yourself in the callback:
     ->source('stubs/stub-3')
     ->output('project-name')
     ->listen(function(string $path, string $content, bool $success) {
+        
         // called for each rendered file, AFTER it is created
+        
     })->render($variables);
 ```
 
@@ -101,8 +105,6 @@ The `listen()` callback is called *after* each file has already been created.
 This may be used to log or output the results of the process.
 
 ## Create stubs
-
-
 
 #### Convert existing files into stubs for future use:
 ```php
@@ -115,7 +117,10 @@ This may be used to log or output the results of the process.
     ]);
 ```
 
-Note the reverse order in the variable array: `Users` becomes `{{name}}`
+In `create()`, variables are declared as `'value' => 'variable'`
+
+
+The above code performs the following behavior:
 
 - Renders all files & folders in `project`
 - Replaces `Users` with `{{name}}`
