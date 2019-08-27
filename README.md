@@ -77,7 +77,7 @@ use Stub\Stub;
 You must handle/store file(s) yourself in the callback:
 
 - This may be used to modify the file's path or contents before you store it.
-- This may be used to even send to an API, like stubbing a github repository.
+- This may be used to send to an API, like stubbing a github repository.
 
 #### Process a folder and listen to all created files with a callback:
 ```php
