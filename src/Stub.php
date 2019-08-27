@@ -32,22 +32,34 @@ class Stub
         $this->variables = $variables;
 
         foreach ($this->files() as $file) {
-            $this->handleOutput(
-                $this->resolvePath($file),
-                $this->resolveContent($file)
-           );
+            $this->handleOutput($file, $this->resolveContent($file));
         }
+    }
+
+    public function create($variables)
+    {
+        $variables = $this->orderByKeyLength($variables);
+
+        foreach ($variables as $key => $value) {
+            unset($variables[$key]);
+            $variables[$key] = "{$this->openTag}{$value}{$this->closeTag}";
+        }
+
+        $this->usingTags('', '');
+        $this->parse($variables);
     }
 
     protected function handleOutput($path, $content)
     {
         $path = str_replace($this->source, '', $path);
+        $path = $this->resolvePath($path);
+        $path = ltrim($path, DIRECTORY_SEPARATOR);
 
         if (is_callable(($this->output))) {
             return ($this->output)($path, $content);
         }
 
-        $path = $this->output . $path;
+        $path = $this->output . DIRECTORY_SEPARATOR . $path;
 
         $directory = $this->getDirectory($path);
 
