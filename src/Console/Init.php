@@ -23,15 +23,15 @@ class Init extends Command
 
     protected function execute(InputInterface $i, OutputInterface $o)
     {
-        $io = new SymfonyStyle($i, $o);
-        $io->title('Initializing Stub Values');
-        $io->text('Generate a stub.json file: {"search": "replace"}');
-
-        $io->newLine();
-
         $values = [];
         $continue = true;
         $helper = $this->getHelper('question');
+        $file = $i->getArgument('file');
+
+        $io = new SymfonyStyle($i, $o);
+        $io->title('Initializing Stub Values');
+        $io->text("Generating $file file: {\"search\": \"replace\"}");
+        $io->newLine();
 
         while ($continue) {
             $question = new Question('Search: ');
@@ -48,11 +48,8 @@ class Init extends Command
             $io->newLine();
         }
 
-        file_put_contents(
-            $i->getArgument('file'),
-            json_encode($values, JSON_PRETTY_PRINT)
-        );
+        file_put_contents($file, json_encode($values, JSON_PRETTY_PRINT));
 
-        $o->writeLn('<info>Created:</info> <comment>stub.json</comment>');
+        $o->writeLn("<info>Created:</info> <comment>$file</comment>");
     }
 }
