@@ -2,8 +2,8 @@
 
 namespace Stub\Laravel;
 
-use Stub\Console\Parse;
-use Stub\Console\Create;
+use Stub\Laravel\Console\Parse;
+use Stub\Laravel\Console\Create;
 
 use Illuminate\Support\ServiceProvider;
 

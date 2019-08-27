@@ -10,9 +10,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Parse extends Command
 {
+    public $commandName = 'parse';
+
     protected function configure()
     {
-        $this->setName("parse")
+        $this->setName($this->commandName)
             ->setDescription("Take a source, replace variables & output it")
             ->addArgument('source', InputArgument::REQUIRED, 'What are we stubbing?')
             ->addArgument('output', InputArgument::REQUIRED, 'Where are we outputing?')

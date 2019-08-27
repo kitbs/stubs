@@ -10,9 +10,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Create extends Command
 {
+    public $commandName = 'create';
+
     protected function configure()
     {
-        $this->setName("create")
+        $this->setName($this->commandName)
             ->setDescription("Turn existing files into stubs")
             ->addArgument('source', InputArgument::REQUIRED, 'What are we stubbing?')
             ->addArgument('output', InputArgument::REQUIRED, 'Where are we outputing?')
