@@ -67,7 +67,7 @@ use Stub\Stub;
 ```php
 (new Stub)
     ->source('stubs/stub-2')
-    ->output(function($path, $content) {
+    ->output(function(string $path, string $content) {
         // called for each rendered file, INSTEAD of creating it
     })->render($variables);
 ```
