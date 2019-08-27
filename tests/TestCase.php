@@ -8,9 +8,14 @@ use PHPUnit\Framework\TestCase as BaseCase;
 
 class TestCase extends BaseCase
 {
-    public function tearDown() :void
+    public function setUp(): void
     {
-        $dir = __DIR__.'/output';
+        chdir(__DIR__);
+    }
+
+    public function tearDown(): void
+    {
+        $dir = __DIR__.'/project';
 
         if (!is_dir($dir)) {
             return;

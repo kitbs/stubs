@@ -7,18 +7,18 @@ use RecursiveDirectoryIterator;
 
 class Stub
 {
+    public $source;
     public $output;
-    public static $path;
-    public static $method;
     public $variables = [];
+    public $openTag = '{{';
+    public $closeTag = '}}';
+    public $appendFilename;
 
-    public static function source($path)
+    public function source($path)
     {
-        self::$path = $path;
+        $this->source = $path;
 
-        self::$method = (is_dir($path)) ? 'parseDirectory' : 'parseFile';
-
-        return new self;
+        return $this;
     }
 
     public function output($path)
@@ -28,57 +28,61 @@ class Stub
         return $this;
     }
 
-    public function parseDirectory()
-    {
-        foreach ($this->files() as $file) {
-            $this->handleOutput(
-                $this->resolvedPath($file),
-                $this->resolvedContent($file)
-           );
-        }
-    }
-
-    public function parseFile()
-    {
-        $this->handleOutput(
-            $this->resolvedPath(basename(self::$path)),
-            $this->resolvedContent(self::$path)
-       );
-    }
-
-    public function parse($variables)
+    public function render($variables)
     {
         $this->variables = $variables;
 
-        $this->{self::$method}();
+        foreach ($this->files() as $file) {
+            $this->handleOutput($file, $this->resolveContent($file));
+        }
+    }
 
-        return $this;
+    public function create($variables)
+    {
+        $variables = $this->orderByKeyLength($variables);
+
+        foreach ($variables as $key => $value) {
+            unset($variables[$key]);
+            $variables[$key] = "{$this->openTag}{$value}{$this->closeTag}";
+        }
+
+        $this->appendFilename = '.stub';
+
+        $this->usingTags('', '');
+        $this->render($variables);
     }
 
     protected function handleOutput($path, $content)
     {
-        $path = $this->getBasePath($path);
+        $path = str_replace($this->source, '', $path);
+        $path = $this->resolvePath($path);
+        $path = ltrim($path, DIRECTORY_SEPARATOR);
 
         if (is_callable(($this->output))) {
             return ($this->output)($path, $content);
         }
 
-        if (!file_exists($this->folder($path))) {
-            mkdir($this->folder($path), 0777, true);
+        $path = $this->output . DIRECTORY_SEPARATOR . $path;
+
+        $path = $path . $this->appendFilename;
+
+        $directory = $this->getDirectory($path);
+
+        if ($directory && ! file_exists($directory)) {
+            mkdir($directory, 0777, true);
         }
 
         return file_put_contents($path, $content);
     }
 
-    protected function resolvedPath($path)
+    protected function resolvePath($path)
     {
         $path = str_replace('.stub', '', $path);
-        $path = ltrim($path, DIRECTORY_SEPARATOR);
 
         return $this->variables($path);
     }
 
-    protected function resolvedContent($path)
+    protected function resolveContent($path)
     {
         return $this->variables(file_get_contents($path));
     }
@@ -86,13 +90,14 @@ class Stub
     protected function variables($content = "")
     {
         foreach ($this->variables as $key => $value) {
-            $content = str_replace("{{{$key}}}", $value, $content);
+            $search = "{$this->openTag}{$key}{$this->closeTag}";
+            $content = str_replace($search, $value, $content);
         }
 
         return $content;
     }
 
-    protected function folder($path)
+    protected function getDirectory($path)
     {
         $segments = explode(DIRECTORY_SEPARATOR, $path);
 
@@ -101,24 +106,13 @@ class Stub
         return implode(DIRECTORY_SEPARATOR, $segments);
     }
 
-    public function getBasePath($path)
+    protected function orderByKeyLength($array)
     {
-        $filepath_parts = explode(DIRECTORY_SEPARATOR, $path);
-        $folder_parts = explode(DIRECTORY_SEPARATOR, self::$path);
+        $keys = array_map('strlen', array_keys($array));
 
-        $common = array_intersect($filepath_parts, $folder_parts);
+        array_multisort($keys, SORT_DESC, $array);
 
-        foreach ($common as $index => $segment) {
-            unset($filepath_parts[$index]);
-        }
-
-        $filepath = join(DIRECTORY_SEPARATOR, $filepath_parts);
-
-        if (is_callable($this->output)) {
-            return $filepath;
-        }
-
-        return rtrim($this->output, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $filepath;
+        return $array;
     }
 
     protected function files()
@@ -127,7 +121,7 @@ class Stub
 
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator(
-                self::$path
+                $this->source
             )
         );
 
@@ -138,5 +132,13 @@ class Stub
         }
 
         return $files;
+    }
+
+    protected function usingTags($open, $close)
+    {
+        $this->openTag = $open;
+        $this->closeTag = $close;
+
+        return $this;
     }
 }

@@ -1,10 +1,14 @@
 {
     "name": "dillingham/stubs",
     "description": "Create files, folders & content with variables",
-    "keywords": ["php", "stub"],
+    "keywords": [
+        "php",
+        "stub"
+    ],
     "license": "MIT",
     "require": {
-        "php": "^7.1.3"
+        "php": "^7.1.3",
+        "symfony/console": "^4.3"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.5"
@@ -27,8 +31,20 @@
     "scripts": {
         "test": "vendor/bin/phpunit",
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
-
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Stub\\Laravel\\StubProvider"
+            ],
+            "aliases": {
+                "Stub": "Stub\\Laravel\\StubFacade"
+            }
+        }
+    },
+    "bin": [
+        "stub"
+    ]
 }

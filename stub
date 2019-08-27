@@ -1,0 +1,17 @@
+#!/usr/bin/env php
+<?php
+
+if (file_exists(__DIR__.'/../../autoload.php')) {
+    require __DIR__.'/../../autoload.php';
+} else {
+    require __DIR__.'/vendor/autoload.php';
+}
+
+use Stub\Console\Create;
+use Stub\Console\Render;
+use Symfony\Component\Console\Application;
+
+$app = new Application();
+$app->add(new Render());
+$app->add(new Create());
+$app->run();

@@ -6,56 +6,86 @@ use Stub\Stub;
 
 class StubTest extends TestCase
 {
-    public function testDirectoryToDirectoryStubbing()
+    public function testDirectoryToDirectoryStubbingStub1()
     {
-        Stub::source(__DIR__.'/stubs')
-            ->output(__DIR__.'/output')
-            ->parse(['name' => 'User', 'lower' => 'user']);
+        (new Stub)
+            ->source(__DIR__.'/stubs/stub-1')
+            ->output(__DIR__.'/project')
+            ->render(['name' => 'User', 'lower_plural' => 'users']);
 
-        $this->assertFileExists(__DIR__.'/output/User.php');
-        $this->assertFileExists(__DIR__.'/output/folder/UserFactory.php');
-        $this->assertFileExists(__DIR__.'/output/User-folder/Example.php');
-        $this->assertFileExists(__DIR__.'/output/folder/another-folder/UserController.php');
-
-        $this->assertEquals('User is present', file_get_contents(__DIR__.'/output/User.php'));
+        $this->assertFileExists(__DIR__.'/project/User.php');
+        $this->assertEquals(
+            'class User extends Model {}',
+            file_get_contents(__DIR__.'/project/User.php')
+        );
+        $this->assertFileExists(__DIR__.'/project/Observers/UserObserver.php');
+        $this->assertEquals(
+            'class UserObserver {}',
+            file_get_contents(__DIR__.'/project/Observers/UserObserver.php')
+        );
     }
 
-    public function testFileToDirectoryStubbing()
+    public function testDirectoryToDirectoryStubbingStub2()
     {
-        Stub::source(__DIR__.'/stubs/{{name}}.php.stub')
-            ->output(__DIR__.'/output')
-            ->parse(['name' => 'User', 'lower' => 'user']);
+        (new Stub)
+            ->source(__DIR__.'/stubs/stub-2')
+            ->output(__DIR__.'/project')
+            ->render(['name' => 'User', 'lower_plural' => 'users']);
 
-        $this->assertFileExists(__DIR__.'/output/User.php');
-
-        $this->assertEquals('User is present', file_get_contents(__DIR__.'/output/User.php'));
+        $this->assertFileExists(__DIR__.'/project/views/users/index.blade.php');
+        $this->assertEquals(
+            '<button>Create User</button>',
+            file_get_contents(__DIR__.'/project/views/users/index.blade.php')
+        );
     }
 
     public function testDirectoryToCallbackStubbing()
     {
-        Stub::source(__DIR__.'/stubs/')
+        (new Stub)
+            ->source(__DIR__.'/stubs/stub-1')
             ->output(function ($path, $content) {
                 $this->assertContains('User', $path);
                 $this->assertContains('User', $content);
                 $this->assertNotContains('stubs', $path);
-            })->parse(['name' => 'User', 'lower' => 'user']);
+                $this->assertNotContains(getcwd(), $path);
+            })->render(['name' => 'User']);
     }
 
-    public function testFileToCallbackStubbing()
+    public function testRelativeDirectoryToDirectoryStubbing()
     {
-        Stub::source(__DIR__.'/stubs/{{name}}.php.stub')
-            ->output(function ($path, $content) {
-                $this->assertEquals('User.php', $path);
-                $this->assertEquals('User is present', $content);
-            })->parse(['name' => 'User', 'lower' => 'user']);
+        (new Stub)
+            ->source('stubs/stub-1')
+            ->output('project')
+            ->render(['name' => 'User', 'lower' => 'user']);
+
+        $this->assertFileExists(__DIR__.'/project/User.php');
+        $this->assertEquals(
+            'class User extends Model {}',
+            file_get_contents(__DIR__.'/project/User.php')
+        );
+        $this->assertFileExists(__DIR__.'/project/Observers/UserObserver.php');
+        $this->assertEquals(
+            'class UserObserver {}',
+            file_get_contents(__DIR__.'/project/Observers/UserObserver.php')
+        );
     }
 
-    public function testFileToCallbackStubbingNonStatic()
+    public function testCreatingStubs()
     {
-        (new Stub)->source(__DIR__.'/stubs/{{name}}.php.stub')
-            ->output(function ($path, $content) {
-                $this->assertContains('User', $path);
-                $this->assertContains('User', $content);
-            })->parse(['name' => 'User', 'lower' => 'user']);
+        (new Stub)
+            ->source(__DIR__.'/reverse')
+            ->output(__DIR__.'/project')
+            ->create(['User' => 'name', 'users' => 'lower_plural']);
+
+        $this->assertFileExists(__DIR__.'/project/{{name}}.php.stub');
+        $this->assertEquals(
+            '{{name}} extends Model',
+            file_get_contents(__DIR__.'/project/{{name}}.php.stub')
+        );
+        $this->assertFileExists(__DIR__.'/project/Controllers/{{name}}Controller.php.stub');
+        $this->assertEquals(
+            '{{name}}Controller',
+            file_get_contents(__DIR__.'/project/Controllers/{{name}}Controller.php.stub')
+        );
     }
 }
