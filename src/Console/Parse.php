@@ -13,10 +13,10 @@ class Parse extends Command
     protected function configure()
     {
         $this->setName("parse")
-                ->setDescription("Take a source, replace variables & output it")
-                ->addArgument('source', InputArgument::REQUIRED, 'What are we stubbing?')
-                ->addArgument('output', InputArgument::REQUIRED, 'Where are we outputing?')
-                ->addArgument('variables', InputArgument::IS_ARRAY, 'What variables to use?');
+            ->setDescription("Take a source, replace variables & output it")
+            ->addArgument('source', InputArgument::REQUIRED, 'What are we stubbing?')
+            ->addArgument('output', InputArgument::REQUIRED, 'Where are we outputing?')
+            ->addArgument('variables', InputArgument::IS_ARRAY, 'What variables to use?');
     }
 
     protected function execute(InputInterface $i, OutputInterface $o)
@@ -36,7 +36,7 @@ class Parse extends Command
             }
         }
 
-        Stub::source($source)->output($output)->parse($parse);
+        (new Stub)->source($source)->output($output)->parse($parse);
 
         $o->writeLn('<info>Stub success!</info>');
     }
