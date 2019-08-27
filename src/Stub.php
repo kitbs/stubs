@@ -12,6 +12,7 @@ class Stub
     public $variables = [];
     public $openTag = '{{';
     public $closeTag = '}}';
+    public $appendFilename;
 
     public function source($path)
     {
@@ -45,6 +46,8 @@ class Stub
             $variables[$key] = "{$this->openTag}{$value}{$this->closeTag}";
         }
 
+        $this->appendFilename = '.stub';
+
         $this->usingTags('', '');
         $this->render($variables);
     }
@@ -60,6 +63,8 @@ class Stub
         }
 
         $path = $this->output . DIRECTORY_SEPARATOR . $path;
+
+        $path = $path . $this->appendFilename;
 
         $directory = $this->getDirectory($path);
 

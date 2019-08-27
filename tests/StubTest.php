@@ -77,15 +77,15 @@ class StubTest extends TestCase
             ->output(__DIR__.'/project')
             ->create(['User' => 'name', 'users' => 'lower_plural']);
 
-        $this->assertFileExists(__DIR__.'/project/{{name}}.php');
+        $this->assertFileExists(__DIR__.'/project/{{name}}.php.stub');
         $this->assertEquals(
             '{{name}} extends Model',
-            file_get_contents(__DIR__.'/project/{{name}}.php')
+            file_get_contents(__DIR__.'/project/{{name}}.php.stub')
         );
-        $this->assertFileExists(__DIR__.'/project/Controllers/{{name}}Controller.php');
+        $this->assertFileExists(__DIR__.'/project/Controllers/{{name}}Controller.php.stub');
         $this->assertEquals(
             '{{name}}Controller',
-            file_get_contents(__DIR__.'/project/Controllers/{{name}}Controller.php')
+            file_get_contents(__DIR__.'/project/Controllers/{{name}}Controller.php.stub')
         );
     }
 }
