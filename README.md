@@ -53,48 +53,23 @@ Simply declare the source and output and which variables to parse.
 ```php
 use Stub\Stub;
 ```
-#### Copy the contents of one folder to another folder
+#### Process the contents of a folder & output to another folder
 ```php
-Stub::source('stubs')
-    ->output('output')
-    ->parse($variables);
-```
-
-#### Copy one file to a folder
-```php
-Stub::source('stubs/file.php')
-    ->output('output')
-    ->parse($variables);
-```
-
-#### Copy one file to another file
-```php
-Stub::source('stubs/file.php')
-    ->output('output/newfile.php', true)
-    ->parse($variables);
-```
-
-#### Use variables in the output path
-```php
-Stub::source('stubs/file.php')
-    ->output('output/{{name}}')
-    ->parse($variables);
-```
-```php
-Stub::source('stubs/file.php')
-    ->output('output/{{name}}/newfile.php', true)
+(new Stub)
+    ->source('stubs/stub-1')
+    ->output('project-name')
     ->parse($variables);
 ```
 
 #### Process the contents of a folder and send the results to a callback
 ```php
-Stub::source('stubs')
+(new Stub)
+    ->source('stubs/stub-2')
     ->output(function($path, $content) {
-        // called when file(s) parsed
+        // called for each parsed file
     })->parse($variables);
 ```
 You must handle/store file(s) yourself in the callback.
-
 
 ## Command Line Interface
 
