@@ -134,7 +134,7 @@ stub render ./source ./output key:value key:"value with spaces"
 For many or more complex variable sets, pass a JSON file path:
 
 ```bash
-stub render ./source ./output values.json
+stub render ./source ./output stub.json
 ```
 
 Example of the JSON file content:
@@ -146,6 +146,11 @@ Example of the JSON file content:
     "title": "Programmer"
 }
 ```
+You can generate this interactively by calling `init`
+
+```bash
+stub init
+```
 
 ---
 
@@ -156,10 +161,13 @@ Example of the JSON file content:
 
 #### Artisan
 ```bash
-php artisan stub:render ./stubs ./project vars.json
+php artisan stub:init
 ```
 ```bash
-php artisan stub:create ./project ./stubs vars.json
+php artisan stub:render ./stubs ./project stub.json
+```
+```bash
+php artisan stub:create ./project ./stubs stub.json
 ```
 
 #### Facade
