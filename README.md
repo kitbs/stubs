@@ -47,7 +47,7 @@ Variables can be in filepaths, filenames & in the content
 
 For a basic example, [click here](https://github.com/dillingham/stubs/tree/master/tests/stubs)
 
-### Usage
+### Render stubs
 
 Simply declare the source and output and which variables to render.
 
@@ -72,6 +72,8 @@ use Stub\Stub;
     })->render($variables);
 ```
 You must handle/store file(s) yourself in the callback.
+
+### Create stubs
 
 #### Convert existing files into stubs for future use:
 ```php
