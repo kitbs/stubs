@@ -6,7 +6,7 @@
 
 A package to create files, folders and content with variables.
 
-[PHP Class](https://github.com/dillingham/stubs#usage) | [Standalone CLI](https://github.com/dillingham/stubs#command-line-interface) | [Laravel Support](https://github.com/dillingham/stubs#laravel-support) 
+[PHP Class](https://github.com/dillingham/stubs#usage) | [Standalone CLI](https://github.com/dillingham/stubs#command-line-interface) | [Laravel Support](https://github.com/dillingham/stubs#laravel-support)
 
 ### Installation
 
@@ -49,7 +49,7 @@ For a basic example, [click here](https://github.com/dillingham/stubs/tree/maste
 
 ### Usage
 
-Simply declare the source and output and which variables to parse.
+Simply declare the source and output and which variables to render.
 ```php
 use Stub\Stub;
 ```
@@ -58,7 +58,7 @@ use Stub\Stub;
 (new Stub)
     ->source('stubs/stub-1')
     ->output('project-name')
-    ->parse($variables);
+    ->render($variables);
 ```
 
 #### Process a folder and send the files to a callback:
@@ -66,8 +66,8 @@ use Stub\Stub;
 (new Stub)
     ->source('stubs/stub-2')
     ->output(function($path, $content) {
-        // called for each parsed file
-    })->parse($variables);
+        // called for each renderd file
+    })->render($variables);
 ```
 You must handle/store file(s) yourself in the callback.
 
@@ -82,7 +82,7 @@ You must handle/store file(s) yourself in the callback.
     ]);
 ```
 
-- Parses all files & folders in `project`
+- Renders all files & folders in `project`
 - Replaces `Users` with `{{name}}`
 - Replaces `user` with `{{lower}}`
 
@@ -102,13 +102,13 @@ composer global require dillingham/stubs
 You can pass variables to `stubs` like so:
 
 ```bash
-stub parse ./source ./output key:value key:"value with spaces"
+stub render ./source ./output key:value key:"value with spaces"
 ```
 
 For many or more complex variable sets, pass a json file path:
 
 ```bash
-stub parse ./source ./output values.json
+stub render ./source ./output values.json
 ```
 
 Example of the json file content:
@@ -130,10 +130,10 @@ Use artisan commands & facades along with methods demonstrated above
 ---
 
 #### Artisan
-```php
-php artisan stub:parse ./stubs ./project vars.json
+```bash
+php artisan stub:render ./stubs ./project vars.json
 ```
-```php
+```bash
 php artisan stub:create ./project ./stubs vars.json
 ```
 
@@ -142,7 +142,7 @@ php artisan stub:create ./project ./stubs vars.json
 ```php
 Stub::source(resource_path('stubs'))
     ->output(resource_path('Models'))
-    ->parse($variables);
+    ->render($variables);
 ```
 ```php
 Stub::source(app_path())
