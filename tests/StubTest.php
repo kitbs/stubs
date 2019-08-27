@@ -69,4 +69,23 @@ class StubTest extends TestCase
             file_get_contents(__DIR__.'/project/Observers/UserObserver.php')
         );
     }
+
+    public function testCreatingStubs()
+    {
+        (new Stub)
+            ->source(__DIR__.'/reverse')
+            ->output(__DIR__.'/project')
+            ->create(['User' => 'name', 'users' => 'lower_plural']);
+
+        $this->assertFileExists(__DIR__.'/project/{{name}}.php');
+        $this->assertEquals(
+            '{{name}} extends Model',
+            file_get_contents(__DIR__.'/project/{{name}}.php')
+        );
+        $this->assertFileExists(__DIR__.'/project/Controllers/{{name}}Controller.php');
+        $this->assertEquals(
+            '{{name}}Controller',
+            file_get_contents(__DIR__.'/project/Controllers/{{name}}Controller.php')
+        );
+    }
 }
