@@ -6,7 +6,7 @@
 
 A package to create files, folders and content with variables.
 
-[Jump to CLI Section](https://github.com/dillingham/stubs#command-line-interface)
+[PHP Class](https://github.com/dillingham/stubs#usage) | [Standalone CLI](https://github.com/dillingham/stubs#command-line-interface) | [Laravel Support](https://github.com/dillingham/stubs#laravel-support) 
 
 ### Installation
 
@@ -86,6 +86,8 @@ You must handle/store file(s) yourself in the callback.
 - Replaces `Users` with `{{name}}`
 - Replaces `user` with `{{lower}}`
 
+---
+
 ## Command Line Interface
 
 Perform the same behavior described above from the command line
@@ -117,4 +119,33 @@ Example of the json file content:
     "email": "brian@dillingham.dev",
     "title": "Programmer"
 }
+```
+
+---
+
+## Laravel Support
+
+Use artisan commands & facades along with methods demonstrated above
+
+---
+
+#### Artisan
+```php
+php artisan stub:parse ./stubs ./project vars.json
+```
+```php
+php artisan stub:create ./project ./stubs vars.json
+```
+
+#### Facade
+
+```php
+Stub::source(resource_path('stubs'))
+    ->output(resource_path('Models'))
+    ->parse($variables);
+```
+```php
+Stub::source(app_path())
+    ->output(resource_path('stubs'))
+    ->create($variables);
 ```
