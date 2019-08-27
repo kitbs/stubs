@@ -7,7 +7,7 @@ use Stub\Console\Create;
 
 use Illuminate\Support\ServiceProvider;
 
-class LaravelProvider extends ServiceProvider
+class StubProvider extends ServiceProvider
 {
     public function boot()
     {

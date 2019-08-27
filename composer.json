@@ -37,8 +37,11 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Stub\\Providers\\LaravelProvider"
-            ]
+                "Stub\\Laravel\\StubProvider"
+            ],
+            "aliases": {
+                "Stub": "Stub\\Laravel\\StubFacade"
+            }
         }
     },
     "bin": [
