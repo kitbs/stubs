@@ -41,7 +41,7 @@ class Init extends Command
 
             $values[$search] = $replace;
 
-            $question = new Question('Continue? (y,n)', 'y');
+            $question = new Question('Another? (y,n)', 'y');
             $continue = $helper->ask($i, $o, $question);
             $continue = ['y' => true, 'n' => false][strtolower($continue)];
 
