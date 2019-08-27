@@ -13,6 +13,7 @@ class Stub
     public $openTag = '{{';
     public $closeTag = '}}';
     public $appendFilename;
+    public $listener;
 
     public function source($path)
     {
@@ -31,10 +32,15 @@ class Stub
     public function render($variables)
     {
         $this->variables = $variables;
+        $count = 0;
 
         foreach ($this->files() as $file) {
-            $this->handleOutput($file, $this->resolveContent($file));
+            if($this->handleOutput($file, $this->resolveContent($file))) {
+                $count++;
+            }
         }
+
+        return $count;
     }
 
     public function create($variables)
@@ -49,7 +55,15 @@ class Stub
         $this->appendFilename = '.stub';
 
         $this->usingTags('', '');
-        $this->render($variables);
+
+        return $this->render($variables);
+    }
+
+    public function listen(callable $listener)
+    {
+        $this->listener = $listener;
+
+        return $this;
     }
 
     protected function handleOutput($path, $content)
@@ -72,22 +86,28 @@ class Stub
             mkdir($directory, 0777, true);
         }
 
-        return file_put_contents($path, $content);
+        $success = file_put_contents($path, $content) !== false;
+
+        if (is_callable(($this->listener))) {
+            ($this->listener)($path, $content, $success);
+        }
+
+        return $success;
     }
 
     protected function resolvePath($path)
     {
         $path = str_replace('.stub', '', $path);
 
-        return $this->variables($path);
+        return $this->replaceVariables($path);
     }
 
     protected function resolveContent($path)
     {
-        return $this->variables(file_get_contents($path));
+        return $this->replaceVariables(file_get_contents($path));
     }
 
-    protected function variables($content = "")
+    protected function replaceVariables($content = "")
     {
         foreach ($this->variables as $key => $value) {
             $search = "{$this->openTag}{$key}{$this->closeTag}";

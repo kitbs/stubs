@@ -8,7 +8,7 @@ class StubTest extends TestCase
 {
     public function testDirectoryToDirectoryStubbingStub1()
     {
-        (new Stub)
+        $count = (new Stub)
             ->source(__DIR__.'/stubs/stub-1')
             ->output(__DIR__.'/project')
             ->render(['name' => 'User', 'lower_plural' => 'users']);
@@ -23,11 +23,13 @@ class StubTest extends TestCase
             'class UserObserver {}',
             file_get_contents(__DIR__.'/project/Observers/UserObserver.php')
         );
+
+        $this->assertEquals(4, $count);
     }
 
     public function testDirectoryToDirectoryStubbingStub2()
     {
-        (new Stub)
+        $count = (new Stub)
             ->source(__DIR__.'/stubs/stub-2')
             ->output(__DIR__.'/project')
             ->render(['name' => 'User', 'lower_plural' => 'users']);
@@ -37,6 +39,8 @@ class StubTest extends TestCase
             '<button>Create User</button>',
             file_get_contents(__DIR__.'/project/views/users/index.blade.php')
         );
+
+        $this->assertEquals(1, $count);
     }
 
     public function testDirectoryToCallbackStubbing()
@@ -87,5 +91,19 @@ class StubTest extends TestCase
             '{{name}}Controller',
             file_get_contents(__DIR__.'/project/Controllers/{{name}}Controller.php.stub')
         );
+    }
+
+    public function testListenerCallback()
+    {
+        (new Stub)
+            ->source(__DIR__.'/stubs/stub-2')
+            ->output(__DIR__.'/project')
+            ->listen(function ($path, $content, $success) {
+                $this->assertEquals(__DIR__.'/project/views/users/index.blade.php', $path);
+                $this->assertFileExists($path);
+                $this->assertEquals('<button>Create User</button>', $content);
+                $this->assertTrue($success);
+            })
+            ->render(['name' => 'User', 'lower_plural' => 'users']);
     }
 }
