@@ -18,6 +18,28 @@ or install globally to use the cli:
 composer global require dillingham/stubs
 ```
 
+## Render stubs
+
+Simply declare the source and output and which variables to render.
+
+Note: optionally append `.stub` to filenames to avoid IDE errors.
+```php
+use Stub\Stub;
+```
+#### Process a folder and output files to another folder:
+```php
+(new Stub)
+    ->source('stubs/stub-1')
+    ->output('project-name')
+    ->render([
+        'resource' => 'User',
+        'plural' => 'Users',
+        'lower' => 'user',
+    ]);
+```
+
+`render()` returns the count of created files
+
 #### Variables
 
 Variables are declared as an associative array.
@@ -39,31 +61,14 @@ becomes `{{name}}` `{{plural}}` `{{lower}}`.
 Variables can be in file paths, file names and in the content:
 
 ```
-/views/{{name}}/index.blade.php
+/views/{{resource}}/index.blade.php
 ```
 ```
-<button>Create {{name}}</button>
+<button>Create {{resource}}</button>
 ```
 
 For a basic example, [click here](https://github.com/dillingham/stubs/tree/master/tests/stubs).
 
-## Render stubs
-
-Simply declare the source and output and which variables to render.
-
-Note: optionally append `.stub` to filenames to avoid IDE errors.
-```php
-use Stub\Stub;
-```
-#### Process a folder and output files to another folder:
-```php
-(new Stub)
-    ->source('stubs/stub-1')
-    ->output('project-name')
-    ->render($variables);
-```
-
-`render()` returns the count of created files
 
 #### Process a folder and send the files to a callback:
 ```php
