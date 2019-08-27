@@ -74,11 +74,10 @@ use Stub\Stub;
     })->render($variables);
 ```
 
-**You must handle/store file(s) yourself in the callback.** 
+You must handle/store file(s) yourself in the callback:
 
-This may be used to modify the file's path or contents before you store it.
-
-You can even send to an API, imagine stubbing a github repository.
+- This may be used to modify the file's path or contents before you store it.
+- This may be used to even send to an API, like stubbing a github repository.
 
 #### Process a folder and listen to all created files with a callback:
 ```php
@@ -118,9 +117,8 @@ This may be used to log or output the results of the process.
 
 ## Command Line Interface
 
-Perform the same behavior described above from the command line
+> Perform the same behavior described above from the command line
 
----
 Composer install this package globally:
 
 ```bash
@@ -153,9 +151,8 @@ Example of the JSON file content:
 
 ## Laravel Support
 
-Use artisan commands & facades along with methods demonstrated above
+> Use artisan commands & facades along with methods demonstrated above
 
----
 
 #### Artisan
 ```bash
