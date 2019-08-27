@@ -76,8 +76,15 @@ You must handle/store file(s) yourself in the callback.
 (new Stub)
     ->source('project')
     ->output('stubs/stub-name')
-    ->create($variables);
+    ->create([
+        'Users' => 'name',
+        'user' => 'lower'
+    ]);
 ```
+
+- Parses all files & folders in `project`
+- Replaces `Users` with `{{name}}`
+- Replaces `user` with `{{lower}}`
 
 ## Command Line Interface
 
