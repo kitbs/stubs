@@ -56,7 +56,7 @@ The `key` can be referenced between brackets, as `{{key}}`.
 ]
 ```
 
-becomes `{{name}}` `{{plural}}` `{{lower}}` in the stubs.
+becomes `{{resource}}` `{{plural}}` `{{lower}}` in the stubs.
 
 #### Variable Placement
 
