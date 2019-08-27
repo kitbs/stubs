@@ -36,16 +36,16 @@ becomes `{{name}}` `{{plural}}` `{{lower}}`.
 
 ### Variable Placement
 
-Variables can be in filepaths, filenames & in the content
+Variables can be in file paths, file names and in the content:
 
 ```
 /views/{{name}}/index.blade.php
 ```
 ```
-<buton>Create {{name}}</button>
+<button>Create {{name}}</button>
 ```
 
-For a basic example, [click here](https://github.com/dillingham/stubs/tree/master/tests/stubs)
+For a basic example, [click here](https://github.com/dillingham/stubs/tree/master/tests/stubs).
 
 ### Render stubs
 
@@ -55,7 +55,7 @@ Note: optionally append `.stub` to filenames to avoid IDE errors.
 ```php
 use Stub\Stub;
 ```
-#### Process a folder & output files to another folder:
+#### Process a folder and output files to another folder:
 ```php
 (new Stub)
     ->source('stubs/stub-1')
@@ -67,11 +67,24 @@ use Stub\Stub;
 ```php
 (new Stub)
     ->source('stubs/stub-2')
-    ->output(function($path, $content) {
-        // called for each renderd file
+    ->output(function(string $path, string $content) {
+        // called for each rendered file, INSTEAD of creating it
     })->render($variables);
 ```
-You must handle/store file(s) yourself in the callback.
+**You must handle/store file(s) yourself in the callback.** This may be used to modify the file's path or contents further before you store it.
+
+#### Process a folder and listen to all created files with a callback:
+```php
+(new Stub)
+    ->source('stubs/stub-3')
+    ->output('project-name')
+    ->listen(function(string $path, string $content, bool $success) {
+        // called for each rendered file, AFTER it is created
+    })->render($variables);
+```
+Unlike the `output()` callback above, the `listen()` callback is called *after* each file has already been created. This may be used to log or output the results of the process.
+
+The `render()` and `create()` methods return the number of files which were created by the process, which you can also log or output.
 
 ### Create stubs
 
@@ -109,13 +122,13 @@ You can pass variables to `stubs` like so:
 stub render ./source ./output key:value key:"value with spaces"
 ```
 
-For many or more complex variable sets, pass a json file path:
+For many or more complex variable sets, pass a JSON file path:
 
 ```bash
 stub render ./source ./output values.json
 ```
 
-Example of the json file content:
+Example of the JSON file content:
 
 ```json
 {

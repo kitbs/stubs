@@ -38,8 +38,26 @@ class Create extends Command
             }
         }
 
-        (new Stub)->source($source)->output($output)->create($render);
+        $stubs = (new Stub)->source($source)->output($output);
 
-        $o->writeLn('<info>Stub created!</info>');
+        if ($o->isVerbose()) {
+            $stubs->listen(function ($path, $content, $success) use ($o) {
+                if ($success) {
+                    $o->writeLn('<info>Created</info> <comment>'.$path.'</comment>');
+                }
+                else {
+                    $o->writeLn('<error>Unable to create</error> <comment>'.$path.'</comment>');
+                }
+            });
+        }
+
+        $count = $stubs->create($render);
+
+        if ($count) {
+            $o->writeLn('<info>Stub created!</info> <comment>'.$count.'</comment> <info>file(s) created.</info>');
+        }
+        else {
+            $o->writeLn('<error>Unable to create stub! 0 files created.</error>');
+        }
     }
 }

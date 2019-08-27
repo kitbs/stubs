@@ -38,8 +38,26 @@ class Render extends Command
             }
         }
 
-        (new Stub)->source($source)->output($output)->render($render);
+        $stubs = (new Stub)->source($source)->output($output);
 
-        $o->writeLn('<info>Stub rendered!</info>');
+        if ($o->isVerbose()) {
+            $stubs->listen(function ($path, $content, $success) use ($o) {
+                if ($success) {
+                    $o->writeLn('<info>Rendered</info> <comment>'.$path.'</comment>');
+                }
+                else {
+                    $o->writeLn('<error>Unable to render</error> <comment>'.$path.'</comment>');
+                }
+            });
+        }
+
+        $count = $stubs->render($render);
+
+        if ($count) {
+            $o->writeLn('<info>Stub rendered!</info> <comment>'.$count.'</comment> <info>file(s) rendered.</info>');
+        }
+        else {
+            $o->writeLn('<error>Unable to render stub! 0 files rendered.</error>');
+        }
     }
 }
