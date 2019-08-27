@@ -53,7 +53,7 @@ Simply declare the source and output and which variables to parse.
 ```php
 use Stub\Stub;
 ```
-#### Process the contents of a folder & output to another folder
+#### Process a folder & output files to another folder:
 ```php
 (new Stub)
     ->source('stubs/stub-1')
@@ -61,7 +61,7 @@ use Stub\Stub;
     ->parse($variables);
 ```
 
-#### Process the contents of a folder and send the results to a callback
+#### Process a folder and send the files to a callback:
 ```php
 (new Stub)
     ->source('stubs/stub-2')
@@ -70,6 +70,14 @@ use Stub\Stub;
     })->parse($variables);
 ```
 You must handle/store file(s) yourself in the callback.
+
+#### Convert existing files into stubs for future use:
+```php
+(new Stub)
+    ->source('project')
+    ->output('stubs/stub-name')
+    ->create($variables);
+```
 
 ## Command Line Interface
 
