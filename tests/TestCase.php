@@ -15,7 +15,7 @@ class TestCase extends BaseCase
 
     public function tearDown(): void
     {
-        $dir = __DIR__.'/output';
+        $dir = __DIR__.'/project';
 
         if (!is_dir($dir)) {
             return;
