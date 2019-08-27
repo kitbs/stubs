@@ -86,6 +86,8 @@ You must handle/store file(s) yourself in the callback.
 - Replaces `Users` with `{{name}}`
 - Replaces `user` with `{{lower}}`
 
+---
+
 ## Command Line Interface
 
 Perform the same behavior described above from the command line
@@ -118,6 +120,9 @@ Example of the json file content:
     "title": "Programmer"
 }
 ```
+
+---
+
 ## Laravel Support
 
 Use artisan commands & facades along with methods demonstrated above
