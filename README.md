@@ -1,4 +1,4 @@
-# 📂 Stubs
+# Stubs
 
 [![Build Status](https://travis-ci.com/dillingham/stubs.svg?branch=master)](https://travis-ci.com/dillingham/stubs)
 [![Latest Version on Github](https://img.shields.io/github/release/dillingham/stubs.svg?style=flat-square)](https://packagist.org/packages/dillingham/stubs)
@@ -6,7 +6,10 @@
 
 A package to create files, folders and content with variables.
 
-[PHP Class](https://github.com/dillingham/stubs#usage) | [Standalone CLI](https://github.com/dillingham/stubs#standalone-cli) | [Laravel Support](https://github.com/dillingham/stubs#laravel-support)
+![stub banner](https://user-images.githubusercontent.com/29180903/63808292-9985d500-c8ed-11e9-8e38-5f1f3b9a6c35.png)
+
+
+[PHP Class](https://github.com/dillingham/stubs#render-stubs) | [Standalone CLI](https://github.com/dillingham/stubs#standalone-cli) | [Laravel Support](https://github.com/dillingham/stubs#laravel-support)
 
 ## Installation
 
