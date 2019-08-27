@@ -6,7 +6,7 @@
 
 A package to create files, folders and content with variables.
 
-![stub banner](https://user-images.githubusercontent.com/29180903/63808292-9985d500-c8ed-11e9-8e38-5f1f3b9a6c35.png)
+![stub banner](https://user-images.githubusercontent.com/29180903/63808825-d7372d80-c8ee-11e9-930a-6defd06035d8.png)
 
 
 [PHP Class](https://github.com/dillingham/stubs#render-stubs) | [Standalone CLI](https://github.com/dillingham/stubs#standalone-cli) | [Laravel Support](https://github.com/dillingham/stubs#laravel-support)
