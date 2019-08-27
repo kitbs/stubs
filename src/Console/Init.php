@@ -6,6 +6,7 @@ use Stub\Stub;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -17,6 +18,7 @@ class Init extends Command
     {
         $this->setName($this->commandName);
         $this->setDescription("Create stub.json with values interactively");
+        $this->addArgument('file', InputArgument::OPTIONAL, 'Output file name', 'stub.json');
     }
 
     protected function execute(InputInterface $i, OutputInterface $o)
@@ -46,7 +48,10 @@ class Init extends Command
             $io->newLine();
         }
 
-        file_put_contents('stub.json', json_encode($values, JSON_PRETTY_PRINT));
+        file_put_contents(
+            $i->getArgument('file'),
+            json_encode($values, JSON_PRETTY_PRINT)
+        );
 
         $o->writeLn('<info>Created:</info> <comment>stub.json</comment>');
     }
