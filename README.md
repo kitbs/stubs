@@ -50,6 +50,8 @@ For a basic example, [click here](https://github.com/dillingham/stubs/tree/maste
 ### Usage
 
 Simply declare the source and output and which variables to render.
+
+Note: optionally append `.stub` to filenames to avoid IDE errors.
 ```php
 use Stub\Stub;
 ```
@@ -85,7 +87,7 @@ You must handle/store file(s) yourself in the callback.
 - Renders all files & folders in `project`
 - Replaces `Users` with `{{name}}`
 - Replaces `user` with `{{lower}}`
-
+- Appends `.stub` to filenames (Avoids IDE errors)
 ---
 
 ## Command Line Interface
