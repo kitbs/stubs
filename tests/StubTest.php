@@ -40,7 +40,7 @@ class StubTest extends TestCase
             file_get_contents(__DIR__.'/project/views/users/index.blade.php')
         );
 
-        $this->assertEquals(1, $count);
+        $this->assertEquals(2, $count);
     }
 
     public function testDirectoryToCallbackStubbing()
@@ -131,11 +131,10 @@ class StubTest extends TestCase
             ->source(__DIR__.'/stubs/stub-2')
             ->output(__DIR__.'/project')
             ->listen(function ($path, $content, $success) {
-                $this->assertEquals(__DIR__.'/project/views/users/index.blade.php', $path);
+                $this->assertContains(__DIR__.'/project/views/users', $path);
                 $this->assertFileExists($path);
-                $this->assertEquals('<button>Create User</button>', $content);
+                $this->assertContains('User', $content);
                 $this->assertTrue($success);
-            })
-            ->render(['name' => 'User', 'lower_plural' => 'users']);
+            })->render(['name' => 'User', 'lower_plural' => 'users']);
     }
 }

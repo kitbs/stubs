@@ -1,1 +1,1 @@
-<a href="/{{plural}}">All {{plural}}</a>
+<a href="/{{plural}}">{{plural}}</a> / {{name}}
