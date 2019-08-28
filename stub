@@ -9,9 +9,13 @@ if (file_exists(__DIR__.'/../../autoload.php')) {
 
 use Stub\Console\Create;
 use Stub\Console\Render;
+use Stub\Console\Init;
+use Stub\Console\Quick;
 use Symfony\Component\Console\Application;
 
 $app = new Application();
 $app->add(new Render());
 $app->add(new Create());
+$app->add(new Init());
+$app->add(new Quick());
 $app->run();
