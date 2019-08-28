@@ -29,8 +29,13 @@ class Init extends Command
         $file = $i->getArgument('file');
 
         $io = new SymfonyStyle($i, $o);
+        $io->newLine();
+        $io->newLine();
         $io->title('Initializing Stub Values');
         $io->text("Generating $file file: {\"search\": \"replace\"}");
+        $io->newLine();
+        $io->text('<comment>(press enter/return to proceed to the next step)</comment>');
+        $io->newLine();
         $io->newLine();
 
         while ($continue) {
@@ -41,7 +46,7 @@ class Init extends Command
 
             $values[$search] = $replace;
 
-            $question = new Question('Continue? (y,n)', 'y');
+            $question = new Question('Another? (y,n)', 'y');
             $continue = $helper->ask($i, $o, $question);
             $continue = ['y' => true, 'n' => false][strtolower($continue)];
 
