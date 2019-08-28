@@ -187,7 +187,6 @@ Composer install this package globally:
 composer global require dillingham/stubs
 ```
 
-
 **For a quick interactive clone with search and replace:**
 
 ```
@@ -201,7 +200,14 @@ stub quick source output
 stub render ./source ./output key:value key:"with spaces"
 ```
 
-For many or more complex variable sets, pass a JSON file path:
+For a variable set, set the `--varset` option to the fully-qualified class name of your variable set class, and pass at least one variable (without a key) as the base variable, followed by any additional variables as usual:
+
+```bash
+stub render ./source ./output user --varset=App\\Varsets\\ModelVariables
+stub render ./source ./output user vendor:dillingham --varset=App\\Varsets\\ModelVariables
+```
+
+For many or more complex variables, pass a JSON file path:
 
 ```bash
 stub render ./source ./output stub.json
