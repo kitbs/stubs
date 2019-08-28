@@ -32,7 +32,7 @@ class Init extends Command
         $io->newLine();
         $io->newLine();
         $io->title('Initializing Stub Values');
-        $io->text('Generate a stub.json file: {"search": "replace"}');
+        $io->text("Generating $file file: {\"search\": \"replace\"}");
         $io->newLine();
         $io->text('<comment>(press enter/return to proceed to the next step)</comment>');
         $io->newLine();
