@@ -114,7 +114,15 @@ Composer install this package globally:
 composer global require dillingham/stubs
 ```
 
-You can pass variables to `stubs` like so:
+
+**For a quick interactive clone with search and replace:**
+
+```
+stub quick source output
+```
+<img width="1019" alt="Screen Shot 2019-08-28 at 2 08 08 AM" src="https://user-images.githubusercontent.com/29180903/63829877-b693c580-c938-11e9-8b43-4c0f65f28bb6.png">
+
+#### Render stubs
 
 ```bash
 stub render ./source ./output key:value key:"with spaces"
@@ -138,12 +146,6 @@ You can generate this interactively by calling `init`
 
 ```bash
 stub init
-```
-
-**For a quick interactive clone with search and replace:**
-
-```
-stub quick source output
 ```
 
 ---
