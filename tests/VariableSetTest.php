@@ -26,7 +26,7 @@ class VariableSetTest extends TestCase
         ], $variables);
     }
 
-    public function testNovaToolVariableSetValidated()
+    public function testNovaToolVariableSetValidate()
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The base value expects a vendor and name in \'Composer\' format');
@@ -36,9 +36,43 @@ class VariableSetTest extends TestCase
         $variables = VariableSets\NovaTool::make($package)->values();
     }
 
+    public function testVariableSetNoAdditional()
+    {
+        $variables = VariableSets\Example1::make('User')->values();
+
+        $this->assertEquals([
+            'name'         => 'User',
+            'lower_plural' => 'users',
+        ], $variables);
+    }
+
+    public function testVariableSetAdditionalArray()
+    {
+        $variables = VariableSets\Example1::make('User', ['additional' => 'extra'])->values();
+
+        $this->assertEquals([
+            'additional'   => 'extra',
+            'name'         => 'User',
+            'lower_plural' => 'users',
+        ], $variables);
+    }
+
+    public function testVariableSetAdditionalVariableSet()
+    {
+        $postVariables = VariableSets\Example2::make('Post')->values();
+        $variables = VariableSets\Example1::make('User', $postVariables)->values();
+
+        $this->assertEquals([
+            'name'              => 'User',
+            'lower_plural'      => 'users',
+            'post_name'         => 'Post',
+            'post_lower_plural' => 'posts',
+        ], $variables);
+    }
+
     public function testVariableSetStubbing()
     {
-        $variables = VariableSets\View::make('Blog Post');
+        $variables = VariableSets\Example1::make('Blog Post');
 
         $count = (new Stub)
             ->source(__DIR__.'/stubs/stub-2')

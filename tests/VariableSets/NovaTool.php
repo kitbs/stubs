@@ -8,7 +8,7 @@ use Stub\VariableSet;
 
 class NovaTool extends VariableSet
 {
-    public function transform(): array
+    protected function transform()
     {
         return [
             'package'          => $this->get(),
@@ -30,7 +30,7 @@ class NovaTool extends VariableSet
 
     protected function toolNamespace()
     {
-        return $this->mockStrStudly($this->toolVendor()).'\\'.$this->toolClass();
+        return MockStr::studly($this->toolVendor()).'\\'.$this->toolClass();
     }
 
     protected function escapedToolNamespace()
@@ -40,7 +40,7 @@ class NovaTool extends VariableSet
 
     protected function toolClass()
     {
-        return $this->mockStrStudly($this->toolName());
+        return MockStr::studly($this->toolName());
     }
 
     protected function toolVendor()
@@ -50,23 +50,11 @@ class NovaTool extends VariableSet
 
     protected function toolTitle()
     {
-        return $this->mockStrTitle(str_replace('-', ' ', $this->toolName()));
+        return MockStr::title(str_replace('-', ' ', $this->toolName()));
     }
 
     protected function toolName()
     {
         return explode('/', $this->get())[1];
-    }
-
-    protected function mockStrStudly(string $value)
-    {
-        $value = ucwords(str_replace(['-', '_'], ' ', $value));
-
-        return str_replace(' ', '', $value);
-    }
-
-    protected function mockStrTitle(string $value)
-    {
-        return ucwords($value);
     }
 }

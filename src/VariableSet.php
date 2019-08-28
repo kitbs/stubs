@@ -3,6 +3,7 @@
 namespace Stub;
 
 use JsonSerializable;
+use InvalidArgumentException;
 
 abstract class VariableSet implements JsonSerializable
 {
@@ -21,11 +22,18 @@ abstract class VariableSet implements JsonSerializable
     /**
      * Construct the variable set from a base value.
      * @param string $base  The base value
-     * @param array  $variables  Additional variables
+     * @param array|\Stub\VariableSet  $variables  Additional variables
      */
-    public function __construct(string $base, array $variables = [])
+    public function __construct(string $base, $variables = [])
     {
         $this->base = $base;
+
+        if ($variables instanceof VariableSet) {
+            $variables = $variables->values();
+        }
+        elseif (!is_array($variables)) {
+            throw new InvalidArgumentException('Variables must be an array or VariableSet');
+        }
 
         foreach ($variables as $key => $value) {
             $this->variables[$key] = $value;
@@ -69,15 +77,15 @@ abstract class VariableSet implements JsonSerializable
     {
         $this->validate();
 
-        return array_merge($this->transform(), $this->variables);
+        return array_merge($this->variables, $this->transform());
     }
 
     /**
      * Validate any values passed to the variable set.
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException|\Exception
      * @return void
      */
-    public function validate()
+    protected function validate()
     {
         //
     }
@@ -86,5 +94,5 @@ abstract class VariableSet implements JsonSerializable
      * Transform the base value into the variable set.
      * @return array
      */
-    abstract public function transform(): array;
+    abstract protected function transform();
 }
