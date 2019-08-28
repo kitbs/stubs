@@ -18,6 +18,10 @@ Available in PHP for applications or a CLI as a productivity tool.
 composer require dillingham/stubs
 ```
 
+## What is a stub?
+
+A stub is a file or series of files that you wish to replicate on command. Furthermore, the file names, folder structure and content can be made unique with the use of variables. Save your stubs, groups of related files, in folders with a descriptive name and and render them using methods documented below:
+
 ## Render stubs
 
 Simply declare the source, output and which variables to render.
@@ -81,6 +85,8 @@ Note: optionally append `.stub` to filenames to avoid IDE errors.
 ```
 
 ## Create stubs
+
+Creating stubs by hand is easy and works just as well. But you may find cases where you wish to generate stubs automatcally. Such as, you really like a way a current project is structured and you want the ability to replicate it quickly in the future. That scenario is probably better accompliished via the CLI tool or artisan command, but its available via the class also.
 
 #### Convert existing files into stubs for future use:
 
