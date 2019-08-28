@@ -1,0 +1,6 @@
+BEGIN:VCARD
+VERSION:2.1
+FN:{{name}}
+TITLE:{{title}}
+EMAIL;PREF;INTERNET:{{email}}
+END:VCARD
