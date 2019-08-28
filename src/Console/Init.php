@@ -32,6 +32,9 @@ class Init extends Command
         $io->title('Initializing Stub Values');
         $io->text("Generating $file file: {\"search\": \"replace\"}");
         $io->newLine();
+        $io->text('<comment>(press enter/return to proceed to the next step)</comment>');
+        $io->newLine();
+        $io->newLine();
 
         while ($continue) {
             $question = new Question('Search: ');
