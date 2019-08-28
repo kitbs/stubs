@@ -1,0 +1,1 @@
+<a href="/{{plural}}">All {{plural}}</a>

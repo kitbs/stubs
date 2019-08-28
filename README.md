@@ -58,67 +58,54 @@ The `key` can be referenced between brackets, as `{{key}}`.
 
 becomes `{{resource}}` `{{plural}}` `{{lower}}` in the stubs.
 
-#### Variable Placement
-
-Variables can be in file paths, file names and in the content:
-
-```
-/views/{{resource}}/index.blade.php
-```
-```
-<button>Create {{resource}}</button>
-```
-
-For a basic example, [click here](https://github.com/dillingham/stubs/tree/master/tests/stubs).
-
+[View examples](https://github.com/dillingham/stubs/tree/master/tests/stubs).
 
 #### Process a folder and send the files to a callback:
+
 ```php
 (new Stub)
     ->source('stubs/stub-2')
-    ->output(function(string $path, string $content) {
-    
+    ->output(function($path, $content) {
+
         // called for each rendered file, INSTEAD of creating it
-        
+
     })->render($variables);
 ```
 
-You must handle/store file(s) yourself in the callback:
+You must handle/store file(s) yourself in the callback, useful for:
 
-- This may be used to modify the file's path or contents before you store it.
-- This may be used to send to an API, like stubbing a github repository.
+- Modifying the file's path or contents before you store it.
+- Sending to an API, like stubbing a github repository.
 
 #### Process a folder and listen to all created files with a callback:
+
 ```php
 (new Stub)
     ->source('stubs/stub-3')
     ->output('project-name')
-    ->listen(function(string $path, string $content, bool $success) {
-        
+    ->listen(function($path, $content, $success) {
+
         // called for each rendered file, AFTER it is created
-        
+
     })->render($variables);
 ```
-
-The `listen()` callback is called *after* each file has already been created.
 
 This may be used to log or output the results of the process.
 
 ## Create stubs
 
 #### Convert existing files into stubs for future use:
+
 ```php
 (new Stub)
     ->source('project')
     ->output('stubs/stub-name')
     ->create([
-        'Users' => 'name',
+        'User' => 'resource',
+        'Users' => 'plural',
         'user' => 'lower'
     ]);
 ```
-
-In `create()`, variables are declared as `'value' => 'variable'`
-
 
 The above code performs the following behavior:
 
@@ -144,7 +131,7 @@ composer global require dillingham/stubs
 You can pass variables to `stubs` like so:
 
 ```bash
-stub render ./source ./output key:value key:"value with spaces"
+stub render ./source ./output key:value key:"with spaces"
 ```
 
 For many or more complex variable sets, pass a JSON file path:
@@ -159,7 +146,6 @@ Example of the JSON file content:
 {
     "name": "Brian Dillingham",
     "email": "brian@dillingham.dev",
-    "title": "Programmer"
 }
 ```
 You can generate this interactively by calling `init`
@@ -168,12 +154,11 @@ You can generate this interactively by calling `init`
 stub init
 ```
 
-For a quick interactive clone with search and replace:
+**For a quick interactive clone with search and replace:**
 
 ```
 stub quick source output
 ```
-
 
 ---
 
@@ -181,8 +166,23 @@ stub quick source output
 
 > Use artisan commands & facades along with methods demonstrated above
 
+You have immediate access to the following after you composer install:
+
+#### Facade
+
+```php
+Stub::source(resource_path('stubs/pattern-1'))
+    ->output(app_path())
+    ->render($variables);
+```
+```php
+Stub::source(app_path())
+    ->output(resource_path('stubs/pattern-1'))
+    ->create($variables);
+```
 
 #### Artisan
+
 ```bash
 php artisan stub:init
 ```
@@ -194,16 +194,4 @@ php artisan stub:create ./project ./stubs stub.json
 ```
 ```bash
 php artisan stub:quick ./project/one ./project/two
-```
-#### Facade
-
-```php
-Stub::source(resource_path('stubs'))
-    ->output(resource_path('Models'))
-    ->render($variables);
-```
-```php
-Stub::source(app_path())
-    ->output(resource_path('stubs'))
-    ->create($variables);
 ```
