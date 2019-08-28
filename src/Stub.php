@@ -2,6 +2,7 @@
 
 namespace Stub;
 
+use InvalidArgumentException;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 
@@ -32,7 +33,7 @@ class Stub
 
     public function render($variables)
     {
-        $this->variables = $variables;
+        $this->variables = $this->getVariableValues($variables);
 
         foreach ($this->files() as $file) {
             $this->handleOutput($file);
@@ -43,7 +44,7 @@ class Stub
 
     public function create($variables)
     {
-        $variables = $this->orderByKeyLength($variables);
+        $variables = $this->orderByKeyLength($this->getVariableValues($variables));
 
         foreach ($variables as $key => $value) {
             unset($variables[$key]);
@@ -99,7 +100,7 @@ class Stub
         return $this->replaceVariables(file_get_contents($path));
     }
 
-    protected function replaceVariables($content = "")
+    protected function replaceVariables($content = '')
     {
         foreach ($this->variables as $key => $value) {
             $search = "{$this->openTag}{$key}{$this->closeTag}";
@@ -140,6 +141,18 @@ class Stub
         array_multisort($keys, SORT_DESC, $array);
 
         return $array;
+    }
+
+    protected function getVariableValues($variables)
+    {
+        if ($variables instanceof VariableSet) {
+            return $variables->values();
+        }
+        elseif (is_array($variables)) {
+            return $variables;
+        }
+
+        throw new InvalidArgumentException('Variables must be an array or VariableSet');
     }
 
     protected function files()
