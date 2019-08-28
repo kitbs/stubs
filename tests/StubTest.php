@@ -93,6 +93,38 @@ class StubTest extends TestCase
         );
     }
 
+
+    public function testArrayIndexAsVariableKeysWhenCreating()
+    {
+        (new Stub)
+            ->source(__DIR__.'/reverse')
+            ->output(__DIR__.'/project')
+            ->create(array_flip(['User']));
+
+        // array_flip() produces ['User' => '0']
+        $this->assertFileExists(__DIR__.'/project/{{0}}.php.stub');
+    }
+
+    public function testArrayIndexAsVariableKeysWhenRendering()
+    {
+        // using  project/User.php
+        // pass ['User' => 0]
+        // create project/{{0}}.php.stub
+        // Then pass [0 => 'User'] to replace it
+
+        (new Stub)
+            ->source(__DIR__.'/reverse')
+            ->output(__DIR__.'/project')
+            ->create(array_flip(['User']));
+
+        (new Stub)
+            ->source(__DIR__.'/project')
+            ->output(__DIR__.'/project')
+            ->render(['Brian']);
+
+        $this->assertFileExists(__DIR__.'/project/Brian.php');
+    }
+
     public function testListenerCallback()
     {
         (new Stub)
