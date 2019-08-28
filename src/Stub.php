@@ -2,6 +2,7 @@
 
 namespace Stub;
 
+use InvalidArgumentException;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 
@@ -177,6 +178,6 @@ class Stub
             return json_decode(file_get_contents($path), true);
         }
 
-        return [];
+        throw new InvalidArgumentException("$path does not contain a stub.json");
     }
 }

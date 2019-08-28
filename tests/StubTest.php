@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Stub\Stub;
+use InvalidArgumentException;
 
 class StubTest extends TestCase
 {
@@ -144,5 +145,12 @@ class StubTest extends TestCase
         $this->assertEquals($settings['User\'s name'], 'name');
         $this->assertEquals($settings['User\'s email'], 'email');
         $this->assertEquals($settings['User\'s title'], 'title');
+    }
+
+    public function testExceptionWhenSettingsMissing()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        (new Stub)->settings('stubs/stub-2');
     }
 }
