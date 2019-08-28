@@ -9,6 +9,7 @@ class Stub
 {
     public $source;
     public $output;
+    public $successful = 0;
     public $variables = [];
     public $openTag = '{{';
     public $closeTag = '}}';
@@ -32,15 +33,12 @@ class Stub
     public function render($variables)
     {
         $this->variables = $variables;
-        $count = 0;
 
         foreach ($this->files() as $file) {
-            if($this->handleOutput($file, $this->resolveContent($file))) {
-                $count++;
-            }
+            $this->handleOutput($file);
         }
 
-        return $count;
+        return $this->successful;
     }
 
     public function create($variables)
@@ -66,25 +64,17 @@ class Stub
         return $this;
     }
 
-    protected function handleOutput($path, $content)
+    protected function handleOutput($path)
     {
-        $path = str_replace($this->source, '', $path);
+        $content = $this->resolveContent($path);
+
         $path = $this->resolvePath($path);
-        $path = ltrim($path, DIRECTORY_SEPARATOR);
 
         if (is_callable(($this->output))) {
             return ($this->output)($path, $content);
         }
 
-        $path = $this->output . DIRECTORY_SEPARATOR . $path;
-
-        $path = $path . $this->appendFilename;
-
-        $directory = $this->getDirectory($path);
-
-        if ($directory && ! file_exists($directory)) {
-            mkdir($directory, 0777, true);
-        }
+        $path = $this->getOutputPath($path);
 
         $success = file_put_contents($path, $content) !== false;
 
@@ -92,14 +82,16 @@ class Stub
             ($this->listener)($path, $content, $success);
         }
 
-        return $success;
+        ($success) ? $this->successful++ : null;
     }
 
     protected function resolvePath($path)
     {
         $path = str_replace('.stub', '', $path);
+        $path = str_replace($this->source, '', $path);
+        $path = $this->replaceVariables($path);
 
-        return $this->replaceVariables($path);
+        return ltrim($path, DIRECTORY_SEPARATOR);
     }
 
     protected function resolveContent($path)
@@ -115,6 +107,21 @@ class Stub
         }
 
         return $content;
+    }
+
+    protected function getOutputPath($path)
+    {
+        $path = $this->output . DIRECTORY_SEPARATOR . $path;
+
+        $path = $path . $this->appendFilename;
+
+        $directory = $this->getDirectory($path);
+
+        if ($directory && ! file_exists($directory)) {
+            mkdir($directory, 0777, true);
+        }
+
+        return $path;
     }
 
     protected function getDirectory($path)
