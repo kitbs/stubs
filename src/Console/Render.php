@@ -32,9 +32,10 @@ class Render extends Command
 
 
         if (count($variables) == 0) {
-            $settings = $stub->settings($source);
+            $helper = $this->getHelper('question');
+            $settings = (new Stub)->settings($source);
             foreach ($settings as $question => $var) {
-                $question = new Question($question);
+                $question = new Question("$question: ");
                 $render[$var] = $helper->ask($i, $o, $question);
             }
         }
