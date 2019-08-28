@@ -20,7 +20,7 @@ composer require dillingham/stubs
 
 ## What is a stub?
 
-A stub is a file or series of files that you wish to replicate on command. Furthermore, the file names, folder structure and content can be made unique with the use of variables. Save your stubs, groups of related files, in folders with a descriptive name and and render them using methods documented below:
+A stub is a file or series of files that you wish to replicate on command. Furthermore, the file names, folder structure and content can be made unique with the use of variables. Save your stubs, groups of related files, in folders with a descriptive name and render them using methods documented below:
 
 ## Render stubs
 
@@ -64,8 +64,8 @@ Note: optionally append `.stub` to filenames to avoid IDE errors.
 
         // Called for each parsed file, instead of storing it
         // Useful for further modifications before you store it
-        // or posting to an API like stubbing a github repository
-        
+        // or posting to an API like stubbing a GitHub repository
+
     })->render($variables);
 ```
 
@@ -80,13 +80,13 @@ Note: optionally append `.stub` to filenames to avoid IDE errors.
         // Called for each file after the file it is parsed & stored
         // This may be used to log or output the results of the process
         // $success is either true / false depending on the storing result
-        
+
     })->render($variables);
 ```
 
 ## Create stubs
 
-Creating stubs by hand is easy and works just as well. But you may find cases where you wish to generate stubs automatcally. Such as, you really like a way a current project is structured and you want the ability to replicate it quickly in the future. That scenario is probably better accompliished via the CLI tool or artisan command, but its available via the class also.
+Creating stubs by hand is easy and works just as well. But you may find cases where you wish to generate stubs automatically. Such as, you really like a way a current project is structured and you want the ability to replicate it quickly in the future. That scenario is probably better accomplished via the CLI tool or artisan command, but it's available via the class also.
 
 #### Convert existing files into stubs for future use:
 
