@@ -168,6 +168,13 @@ You can generate this interactively by calling `init`
 stub init
 ```
 
+For a quick interactive clone with search and replace:
+
+```
+stub quick source output
+```
+
+
 ---
 
 # Laravel Support
@@ -185,7 +192,9 @@ php artisan stub:render ./stubs ./project stub.json
 ```bash
 php artisan stub:create ./project ./stubs stub.json
 ```
-
+```bash
+php artisan stub:quick ./project/one ./project/two
+```
 #### Facade
 
 ```php
