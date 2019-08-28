@@ -22,9 +22,8 @@ composer global require dillingham/stubs
 
 ## Render stubs
 
-Simply declare the source and output and which variables to render.
+Simply declare the source, output and which variables to render.
 
-Note: optionally append `.stub` to filenames to avoid IDE errors.
 ```php
 use Stub\Stub;
 ```
@@ -32,7 +31,7 @@ use Stub\Stub;
 ```php
 (new Stub)
     ->source('stubs/stub-1')
-    ->output('project-name')
+    ->output('projects/project-2')
     ->render([
         'resource' => 'User',
         'plural' => 'Users',
@@ -46,7 +45,7 @@ use Stub\Stub;
 
 In `render()`, variables are declared as `'variable' => 'value'`
 
-The `key` can be referenced between brackets, as `{{key}}`.
+The array key can be referenced between brackets, as `{{key}}`:
 
 ```php
 [
@@ -56,9 +55,9 @@ The `key` can be referenced between brackets, as `{{key}}`.
 ]
 ```
 
-becomes `{{resource}}` `{{plural}}` `{{lower}}` in the stubs.
+Becomes `{{resource}}` `{{plural}}` `{{lower}}` in the stubs. [View examples](https://github.com/dillingham/stubs/tree/master/tests/stubs).
 
-[View examples](https://github.com/dillingham/stubs/tree/master/tests/stubs).
+Note: optionally append `.stub` to filenames to avoid IDE errors.
 
 #### Process a folder and send the files to a callback:
 
@@ -67,15 +66,12 @@ becomes `{{resource}}` `{{plural}}` `{{lower}}` in the stubs.
     ->source('stubs/stub-2')
     ->output(function($path, $content) {
 
-        // called for each rendered file, INSTEAD of creating it
-
+        // Called for each rendered file, INSTEAD of creating it
+        // Useful for modifying the file's path or contents before you store it
+        // or sending to an API, like stubbing a github repository.
+        
     })->render($variables);
 ```
-
-You must handle/store file(s) yourself in the callback, useful for:
-
-- Modifying the file's path or contents before you store it.
-- Sending to an API, like stubbing a github repository.
 
 #### Process a folder and listen to all created files with a callback:
 
@@ -85,12 +81,11 @@ You must handle/store file(s) yourself in the callback, useful for:
     ->output('project-name')
     ->listen(function($path, $content, $success) {
 
-        // called for each rendered file, AFTER it is created
-
+        // Called for each rendered file, AFTER it is created
+        // This may be used to log or output the results of the process.
+        
     })->render($variables);
 ```
-
-This may be used to log or output the results of the process.
 
 ## Create stubs
 
