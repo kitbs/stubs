@@ -137,4 +137,12 @@ class StubTest extends TestCase
                 $this->assertTrue($success);
             })->render(['name' => 'User', 'lower_plural' => 'users']);
     }
+
+    public function testGetSourceStubSettings()
+    {
+        $settings = (new Stub)->settings('stubs/stub-3');
+        $this->assertEquals($settings['User\'s name'], 'name');
+        $this->assertEquals($settings['User\'s email'], 'email');
+        $this->assertEquals($settings['User\'s title'], 'title');
+    }
 }
