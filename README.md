@@ -15,10 +15,6 @@ A package to create files, folders and content with variables.
 ```
 composer require dillingham/stubs
 ```
-or install globally to use the cli:
-```
-composer global require dillingham/stubs
-```
 
 ## Render stubs
 
@@ -32,11 +28,7 @@ use Stub\Stub;
 (new Stub)
     ->source('stubs/stub-1')
     ->output('projects/project-2')
-    ->render([
-        'resource' => 'User',
-        'plural' => 'Users',
-        'lower' => 'user',
-    ]);
+    ->render($variables);
 ```
 
 `render()` returns the count of created files
@@ -44,8 +36,6 @@ use Stub\Stub;
 #### Variables
 
 In `render()`, variables are declared as `'variable' => 'value'`
-
-The array key can be referenced between brackets, as `{{key}}`:
 
 ```php
 [
@@ -66,9 +56,9 @@ Note: optionally append `.stub` to filenames to avoid IDE errors.
     ->source('stubs/stub-2')
     ->output(function($path, $content) {
 
-        // Called for each rendered file, INSTEAD of creating it
-        // Useful for modifying the file's path or contents before you store it
-        // or sending to an API, like stubbing a github repository.
+        // Called for each parsed file, instead of storing it
+        // Useful for further modifications before you store it
+        // or posting to an API like stubbing a github repository
         
     })->render($variables);
 ```
@@ -81,8 +71,9 @@ Note: optionally append `.stub` to filenames to avoid IDE errors.
     ->output('project-name')
     ->listen(function($path, $content, $success) {
 
-        // Called for each rendered file, AFTER it is created
-        // This may be used to log or output the results of the process.
+        // Called for each file after the file it is parsed & stored
+        // This may be used to log or output the results of the process
+        // $success is either true / false depending on the storing result
         
     })->render($variables);
 ```
