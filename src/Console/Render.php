@@ -4,6 +4,7 @@ namespace Stub\Console;
 
 use Stub\Stub;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -29,9 +30,20 @@ class Render extends Command
 
         $render = [];
 
+
+        if (count($variables) == 0) {
+            $settings = $stub->settings($source);
+            foreach ($settings as $question => $var) {
+                $question = new Question($question);
+                $render[$var] = $helper->ask($i, $o, $question);
+            }
+        }
+
         if (count($variables) == 1 && file_exists($variables[0])) {
             $render = json_decode(file_get_contents($variables[0]), true);
-        } else {
+        }
+
+        if (empty($render)) {
             foreach ($variables as $index => $keyValue) {
                 $keyValue = explode(':', $keyValue);
                 $render[$keyValue[0]] = $keyValue[1];
