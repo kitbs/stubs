@@ -20,16 +20,20 @@ composer require dillingham/stubs
 
 ## What is a stub?
 
-A stub is a file or series of files that you wish to replicate on command. Furthermore, the file names, folder structure and content can be made unique with the use of variables. Save your stubs, groups of related files, in folders with a descriptive name and render them using methods documented below:
+A stub is a file or series of files that you wish to replicate on command. Furthermore, the file names, folder structure and content can be made unique with the use of variables. Save your stubs, groups of related files, in folders with a descriptive name and render them using methods documented below.
 
 ## Render stubs
 
-Simply declare the source, output and which variables to render.
+### Basic usage
+
+Simply declare the source path, output path, and which variables to render.
 
 ```php
 use Stub\Stub;
 ```
+
 #### Process a folder and output files to another folder:
+
 ```php
 (new Stub)
     ->source('stubs/stub-1')
@@ -37,11 +41,13 @@ use Stub\Stub;
     ->render($variables);
 ```
 
-`render()` returns the count of created files
+`render()` returns the count of created files.
+
+Note: Optionally append `.stub` to filenames to avoid IDE errors.
 
 #### Variables
 
-In `render()`, variables are declared as `'variable' => 'value'`
+In `render()`, variables are declared as `'variable' => 'value'`:
 
 ```php
 [
@@ -53,7 +59,66 @@ In `render()`, variables are declared as `'variable' => 'value'`
 
 Becomes `{{resource}}` `{{plural}}` `{{lower}}` in the stubs. [View examples](https://github.com/dillingham/stubs/tree/master/tests/stubs).
 
-Note: optionally append `.stub` to filenames to avoid IDE errors.
+#### Variable sets
+
+A common use case when replacing variables in stubs is to take a simple value, such as the name of a model (e.g. `blog post`), and transform it in predictable ways, e.g. for use as a class name (singular StudlyCase `BlogPost`), a table name (plural snake_case `blog_posts`), perhaps a permission key (plural kebab-case `blog-posts`), etc.
+
+For these situations, it is possible to use a "variable set". A variable set is a class that extends `Stub\VariableSet` and implements the abstract function `transform()` to return an array of derived variables (see below).
+
+##### Initialising a variable set
+
+The variable set is initialised with a "base" value, and you can optionally include any other additional variables as an array:
+
+```php
+$variableSet = ModelVariables::make('blog post');
+```
+or:
+
+```php
+$variables = [
+    'additional' => 'additional value'
+];
+
+$variableSet = ModelVariables::make('blog post', $variables);
+```
+
+Note: You can also pass another `VariableSet` into the constructor to provide the additional variables.
+
+##### Deriving variables
+
+Within the `transform()` function, you should use `$this->get()` without an argument to retrieve the base value, or with an argument, i.e. `$this->get('additional')`, to retrieve one of the additional variables that was passed to the constructor:
+
+```php
+use Stub\VariableSet;
+use Illuminate\Support\Str;
+
+class ModelVariables extends VariableSet
+{
+    protected function transform()
+    {
+        return [
+            'model'      => Str::studly(Str::singular($this->get())),
+            'table'      => Str::snake(Str::plural($this->get())),
+            'permission' => Str::kebab(Str::plural($this->get())),
+            'additional' => Str::upper($this->get('additional')),
+        ];
+    }
+}
+```
+
+Note: `Illuminate\Support\Str` is used in the above example to transform the case of the values, but this is not required.
+
+##### Retrieving values
+
+The array of derived values from the variable set can be retrieved with `$variableSet->values()`, or you can simply pass the `VariableSet` object to `render()` or `create()`.
+
+Note: The additional variables that were passed to the constructor will be merged with the values returned by `transform()`, so if they do not need any transformation, you do not need to include them again in the `transform()` array.
+
+##### Variable validation
+
+If you need to validate the base value or additional variables that are passed into the constructor, you can override the `validate()` function on your `VariableSet` class, and throw an `InvalidArgumentException` on any value from `get()` that does not pass your checks. [View example](https://github.com/dillingham/stubs/tree/master/tests/VariableSets/NovaTool#L24).
+
+### Advanced usage
 
 #### Process a folder and send the files to a callback:
 
@@ -106,9 +171,9 @@ The above code performs the following behavior:
 - Renders all files & folders in `project`
 - Replaces `Users` with `{{name}}`
 - Replaces `user` with `{{lower}}`
-- Appends `.stub` to filenames (Avoids IDE errors)
+- Appends `.stub` to filenames (to avoid IDE errors)
 
-`create()` returns the count of created files
+`create()` returns the count of created files.
 
 ---
 
