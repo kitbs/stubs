@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Stub\Stub;
+use InvalidArgumentException;
 
 class StubTest extends TestCase
 {
@@ -138,14 +139,27 @@ class StubTest extends TestCase
             })->render(['name' => 'User', 'lower_plural' => 'users']);
     }
 
+    public function testGetSourceStubSettings()
+    {
+        $settings = (new Stub)->settings('stubs/stub-3');
+        $this->assertEquals($settings['User\'s name'], 'name');
+        $this->assertEquals($settings['User\'s email'], 'email');
+        $this->assertEquals($settings['User\'s title'], 'title');
+    }
+
+    public function testExceptionWhenSettingsMissing()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        (new Stub)->settings('stubs/stub-2');
+    }
+
     public function testFilterFalseCallback()
     {
         (new Stub)
             ->source(__DIR__.'/stubs/stub-2')
             ->output(__DIR__.'/project')
             ->filter(function ($path, $content) {
-                $this->assertContains('views/users', $path);
-
                 return false;
             })->render(['lower_plural' => 'users']);
 
@@ -170,7 +184,7 @@ class StubTest extends TestCase
             ->source(__DIR__.'/stubs/stub-2')
             ->output(__DIR__.'/project')
             ->filter(function ($path, $content) {
-                //
+                $this->assertContains('views/users', $path);
             })->render(['lower_plural' => 'users']);
 
         $this->assertDirectoryExists(__DIR__.'/project/views/users');

@@ -2,6 +2,7 @@
 
 namespace Stub;
 
+use InvalidArgumentException;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 
@@ -185,5 +186,16 @@ class Stub
         $this->closeTag = $close;
 
         return $this;
+    }
+
+    public function settings($path)
+    {
+        $path = "$path/stub.json";
+
+        if (file_exists($path)) {
+            return json_decode(file_get_contents($path), true);
+        }
+
+        throw new InvalidArgumentException("$path does not contain a stub.json");
     }
 }
