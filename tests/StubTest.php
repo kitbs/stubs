@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Stub\Stub;
+use Stub\Sources\Github;
 use InvalidArgumentException;
 
 class StubTest extends TestCase
@@ -188,5 +189,15 @@ class StubTest extends TestCase
             })->render(['lower_plural' => 'users']);
 
         $this->assertDirectoryExists(__DIR__.'/project/views/users');
+    }
+
+    public function testGithubSource()
+    {
+        (new Stub)
+            ->source('https://github.com/dillingham/stub-example')
+            ->output('project')
+            ->filter(function ($path, $content) {
+                $this->assertContains('Susan', $content);
+            })->render(['name' => 'Susan']);
     }
 }

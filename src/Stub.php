@@ -2,6 +2,7 @@
 
 namespace Stub;
 
+use Stub\Sources\Github;
 use InvalidArgumentException;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
@@ -20,9 +21,8 @@ class Stub
 
     public function source($path)
     {
-        if (is_object($path)) {
-            $path = $path->path;
-            $this->staged = true;
+        if (substr($path, 0, 18) == 'https://github.com') {
+            $path = (new Github($path))->path;
         }
 
         $this->source = $path;
