@@ -189,6 +189,10 @@ class Stub
             rmdir($directory->getPathname());
         }
 
+        if (file_exists("{$this->source}/stub.json")) {
+            unlink("{$this->source}/stub.json");
+        }
+
         rmdir($this->source);
     }
 
