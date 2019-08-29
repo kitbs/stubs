@@ -7,11 +7,15 @@ if (file_exists(__DIR__.'/../../autoload.php')) {
     require __DIR__.'/vendor/autoload.php';
 }
 
+use Stub\Console\Init;
+use Stub\Console\Quick;
 use Stub\Console\Create;
 use Stub\Console\Render;
 use Symfony\Component\Console\Application;
 
 $app = new Application();
+$app->add(new Init());
+$app->add(new Quick());
 $app->add(new Render());
 $app->add(new Create());
 $app->run();
