@@ -76,9 +76,11 @@ Note: optionally append `.stub` to filenames to avoid IDE errors.
     ->source('stubs/stub-3')
     ->output('project-name')
     ->filter(function($path, $content) {
+    
         // called for each rendered file, BEFORE it is created
         // return false will prevent the output of that path
-        // returning true or nothing will proceeed normally
+        // returning true or nothing will proceed normally
+        
     })->render($variables);
 ```
 
@@ -169,9 +171,9 @@ You can generate this interactively by calling `init`
 stub init
 ```
 
-The stub.json from the stub source folder is used by default:
+The **stub.json** from the stub source folder is used by default:
 ```
-stub source output
+stub render source output
 ```
 
 Add questions to a stub's  source folder:
@@ -181,8 +183,9 @@ Add questions to a stub's  source folder:
     "What is the user's email?": "email",
 }
 ```
-The values will be asked interactively and render `{{name}}` `{{email}}`
+The questions will be asked interactively in the console.
 
+The answers will replace `{{name}}` `{{email}}` in the stubs.
 
 ---
 
