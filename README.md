@@ -10,7 +10,7 @@ Available in PHP for applications or a CLI as a productivity tool.
 
 ![banner](https://user-images.githubusercontent.com/29180903/63810460-c688b680-c8f2-11e9-925d-444c00176e71.png)
 
-[PHP Class](https://github.com/dillingham/stubs#render-stubs) | [Standalone CLI](https://github.com/dillingham/stubs#console) | [Laravel Support](https://github.com/dillingham/stubs#laravel-support)
+[PHP Class](https://github.com/dillingham/stubs#render-stubs) | [Standalone CLI](https://github.com/awesome-stubs/cli) | [Laravel Support](https://github.com/dillingham/stubs#laravel-support)
 
 ## Installation
 
@@ -127,68 +127,6 @@ The above code performs the following behavior:
 
 ---
 
-# Console
-
-> Perform the same behavior described above from the command line
-
-Composer install this package globally:
-
-```bash
-composer global require dillingham/stubs
-```
-
-
-**For a quick interactive clone with search and replace:**
-
-```
-stub quick source output
-```
-<img width="1019" alt="Screen Shot 2019-08-28 at 2 08 08 AM" src="https://user-images.githubusercontent.com/29180903/63829877-b693c580-c938-11e9-8b43-4c0f65f28bb6.png">
-
-#### Render stubs
-
-```bash
-stub render ./source ./output key:value key:"with spaces"
-```
-
-For many or more complex variable sets, pass a JSON file path:
-
-```bash
-stub render ./source ./output stub.json
-```
-
-Example of the JSON file content:
-
-```json
-{
-    "name": "Brian Dillingham",
-    "email": "brian@dillingham.dev",
-}
-```
-You can generate this interactively by calling `init`
-
-```bash
-stub init
-```
-
-The **stub.json** from the stub source folder is used by default:
-```
-stub render source output
-```
-
-Add questions to a stub's  source folder:
-```json
-{
-    "What is the user's name?": "name",
-    "What is the user's email?": "email",
-}
-```
-The questions will be asked interactively in the console.
-
-The answers will replace `{{name}}` `{{email}}` in the stubs.
-
----
-
 # Laravel Support
 
 > Use artisan commands & facades along with methods demonstrated above
@@ -210,14 +148,16 @@ Stub::source(app_path())
 
 #### Artisan
 
+Create variables in a stub.json interactively:
 ```bash
 php artisan stub:init
 ```
+
 ```bash
-php artisan stub:render ./stubs ./project stub.json
+php artisan stub:render source output stub.json
 ```
 ```bash
-php artisan stub:create ./project ./stubs stub.json
+php artisan stub:create source output stub.json
 ```
 ```bash
 php artisan stub:quick ./project/one ./project/two
