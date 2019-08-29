@@ -20,6 +20,11 @@ class Stub
 
     public function source($path)
     {
+        if (is_object($path)) {
+            $path = $path->path;
+            $this->staged = true;
+        }
+
         $this->source = $path;
 
         return $this;
