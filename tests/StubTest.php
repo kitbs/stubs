@@ -194,14 +194,13 @@ class StubTest extends TestCase
     public function testGithubSource()
     {
         $stub = (new Stub)
-            ->source('https://github.com/dillingham/stub-example')
-            ->output('project')
-            ->filter(function ($path, $content) {
-                $this->assertContains('Susan', $content);
-            });
+            ->source('https://github.com/awesome-stubs/skeleton-php')
+            ->output('project');
 
-        $stub->render(['name' => 'Susan']);
+        $stub->render(['class' => 'Comment']);
 
         $this->assertDirectoryNotExists($stub->source);
+
+        $this->assertFileExists('project/src/Comment.php');
     }
 }

@@ -47,9 +47,7 @@ class Stub
             $this->handleOutput($file);
         }
 
-        if ($this->staged) {
-            rmdir($this->source);
-        }
+        $this->unstage();
 
         return $this->successful;
     }
@@ -176,6 +174,22 @@ class Stub
     {
         return is_callable(($this->filter))
             && ($this->filter)($path, $content) === false;
+    }
+
+    public function unstage()
+    {
+        if (!$this->staged) {
+            return;
+        }
+
+        $directories = new RecursiveDirectoryIterator($this->source);
+        $directories->setFlags(RecursiveDirectoryIterator::SKIP_DOTS);
+
+        foreach ($directories as $directory) {
+            rmdir($directory->getPathname());
+        }
+
+        rmdir($this->source);
     }
 
     protected function files()
