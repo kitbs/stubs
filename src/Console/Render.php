@@ -53,6 +53,12 @@ class Render extends Command
 
         $stubs = (new Stub)->source($source)->output($output);
 
+        if (isset($sourceConfig)) {
+            $stubs->filter(function ($path, $content) {
+                return $path != 'stub.json';
+            });
+        }
+
         if ($o->isVerbose()) {
             $stubs->listen(function ($path, $content, $success) use ($o) {
                 if ($success) {
