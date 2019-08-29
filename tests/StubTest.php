@@ -203,4 +203,17 @@ class StubTest extends TestCase
 
         $this->assertFileExists('project/src/Comment.php');
     }
+
+    public function testGithubSourceShorthand()
+    {
+        $stub = (new Stub)
+            ->source(':skeleton-php')
+            ->output('project');
+
+        $stub->render(['class' => 'Comment']);
+
+        $this->assertDirectoryNotExists($stub->source);
+
+        $this->assertFileExists('project/src/Comment.php');
+    }
 }

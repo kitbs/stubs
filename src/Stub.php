@@ -22,10 +22,7 @@ class Stub
 
     public function source($path)
     {
-        if (substr($path, 0, 18) == 'https://github.com') {
-            $path = (new Github($path))->path;
-            $this->staged = true;
-        }
+        $path = $this->getSource($path);
 
         $this->source = $path;
 
@@ -159,6 +156,21 @@ class Stub
         array_pop($segments);
 
         return implode(DIRECTORY_SEPARATOR, $segments);
+    }
+
+    protected function getSource($path)
+    {
+        if (substr($path, 0, 1) == ':') {
+            $path = str_replace(':', '', $path);
+            $path = "https://github.com/awesome-stubs/$path";
+        }
+
+        if (substr($path, 0, 18) == 'https://github.com') {
+            $path = (new Github($path))->path;
+            $this->staged = true;
+        }
+
+        return $path;
     }
 
     protected function orderByKeyLength($array)
