@@ -18,11 +18,13 @@ class Stub
     public $appendFilename;
     public $filter;
     public $listener;
+    public $staged = false;
 
     public function source($path)
     {
         if (substr($path, 0, 18) == 'https://github.com') {
             $path = (new Github($path))->path;
+            $this->staged = true;
         }
 
         $this->source = $path;
@@ -43,6 +45,10 @@ class Stub
 
         foreach ($this->files() as $file) {
             $this->handleOutput($file);
+        }
+
+        if ($this->staged) {
+            rmdir($this->source);
         }
 
         return $this->successful;
@@ -80,6 +86,8 @@ class Stub
 
     protected function handleOutput($path)
     {
+        $originalPath = $path;
+
         $content = $this->resolveContent($path);
 
         $path = $this->resolvePath($path);
@@ -98,6 +106,10 @@ class Stub
 
         if (is_callable(($this->listener))) {
             ($this->listener)($path, $content, $success);
+        }
+
+        if ($this->staged) {
+            unlink($originalPath);
         }
 
         ($success) ? $this->successful++ : null;

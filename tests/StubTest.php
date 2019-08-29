@@ -193,11 +193,15 @@ class StubTest extends TestCase
 
     public function testGithubSource()
     {
-        (new Stub)
+        $stub = (new Stub)
             ->source('https://github.com/dillingham/stub-example')
             ->output('project')
             ->filter(function ($path, $content) {
                 $this->assertContains('Susan', $content);
-            })->render(['name' => 'Susan']);
+            });
+
+        $stub->render(['name' => 'Susan']);
+
+        $this->assertDirectoryNotExists($stub->source);
     }
 }
