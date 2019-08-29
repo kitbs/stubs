@@ -28,11 +28,13 @@ class Render extends Command
         $output = $i->getArgument('output');
         $variables = $i->getArgument('variables');
 
+        $stubs = (new Stub)->source($source)->output($output);
+
         $render = [];
 
         if (count($variables) == 0) {
             $helper = $this->getHelper('question');
-            $sourceConfig = (new Stub)->settings($source);
+            $sourceConfig = (new Stub)->settings($stubs->source);
             foreach ($sourceConfig as $question => $variable) {
                 $question = new Question("$question: ");
                 $render[$variable] = $helper->ask($i, $o, $question);
@@ -49,8 +51,6 @@ class Render extends Command
                 $render[$keyValue[0]] = $keyValue[1];
             }
         }
-
-        $stubs = (new Stub)->source($source)->output($output);
 
         if (isset($sourceConfig)) {
             $stubs->filter(function ($path, $content) {
