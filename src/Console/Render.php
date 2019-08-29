@@ -30,13 +30,12 @@ class Render extends Command
 
         $render = [];
 
-
         if (count($variables) == 0) {
             $helper = $this->getHelper('question');
-            $settings = (new Stub)->settings($source);
-            foreach ($settings as $question => $var) {
+            $sourceConfig = (new Stub)->settings($source);
+            foreach ($sourceConfig as $question => $variable) {
                 $question = new Question("$question: ");
-                $render[$var] = $helper->ask($i, $o, $question);
+                $render[$variable] = $helper->ask($i, $o, $question);
             }
         }
 
@@ -63,8 +62,7 @@ class Render extends Command
             $stubs->listen(function ($path, $content, $success) use ($o) {
                 if ($success) {
                     $o->writeLn('<info>Rendered</info> <comment>'.$path.'</comment>');
-                }
-                else {
+                } else {
                     $o->writeLn('<error>Unable to render</error> <comment>'.$path.'</comment>');
                 }
             });
@@ -74,8 +72,7 @@ class Render extends Command
 
         if ($count) {
             $o->writeLn('<info>Stub rendered!</info> <comment>'.$count.'</comment> <info>file(s) rendered.</info>');
-        }
-        else {
+        } else {
             $o->writeLn('<error>Unable to render stub! 0 files rendered.</error>');
         }
     }
