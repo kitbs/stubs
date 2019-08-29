@@ -10,7 +10,7 @@ Available in PHP for applications or a CLI as a productivity tool.
 
 ![banner](https://user-images.githubusercontent.com/29180903/63810460-c688b680-c8f2-11e9-925d-444c00176e71.png)
 
-[PHP Class](https://github.com/dillingham/stubs#render-stubs) | [Standalone CLI](https://github.com/dillingham/stubs#standalone-cli) | [Laravel Support](https://github.com/dillingham/stubs#laravel-support)
+[PHP Class](https://github.com/dillingham/stubs#render-stubs) | [Standalone CLI](https://github.com/dillingham/stubs#console) | [Laravel Support](https://github.com/dillingham/stubs#laravel-support)
 
 ## Installation
 
@@ -125,7 +125,7 @@ The above code performs the following behavior:
 
 ---
 
-# Standalone CLI
+# Console
 
 > Perform the same behavior described above from the command line
 
@@ -168,6 +168,21 @@ You can generate this interactively by calling `init`
 ```bash
 stub init
 ```
+
+The stub.json from the stub source folder is used by default:
+```
+stub source output
+```
+
+Add questions to a stub's  source folder:
+```json
+{
+    "What is the user's name?": "name",
+    "What is the user's email?": "email",
+}
+```
+The values will be asked interactively and render `{{name}}` `{{email}}`
+
 
 ---
 
