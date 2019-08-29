@@ -153,4 +153,40 @@ class StubTest extends TestCase
 
         (new Stub)->settings('stubs/stub-2');
     }
+
+    public function testFilterFalseCallback()
+    {
+        (new Stub)
+            ->source(__DIR__.'/stubs/stub-2')
+            ->output(__DIR__.'/project')
+            ->filter(function ($path, $content) {
+                return false;
+            })->render(['lower_plural' => 'users']);
+
+        $this->assertDirectoryNotExists(__DIR__.'/project/views/users');
+    }
+
+    public function testFilterTrueCallback()
+    {
+        (new Stub)
+            ->source(__DIR__.'/stubs/stub-2')
+            ->output(__DIR__.'/project')
+            ->filter(function ($path, $content) {
+                return true;
+            })->render(['lower_plural' => 'users']);
+
+        $this->assertDirectoryExists(__DIR__.'/project/views/users');
+    }
+
+    public function testFilterBlankCallback()
+    {
+        (new Stub)
+            ->source(__DIR__.'/stubs/stub-2')
+            ->output(__DIR__.'/project')
+            ->filter(function ($path, $content) {
+                $this->assertContains('views/users', $path);
+            })->render(['lower_plural' => 'users']);
+
+        $this->assertDirectoryExists(__DIR__.'/project/views/users');
+    }
 }

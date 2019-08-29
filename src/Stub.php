@@ -15,6 +15,7 @@ class Stub
     public $openTag = '{{';
     public $closeTag = '}}';
     public $appendFilename;
+    public $filter;
     public $listener;
 
     public function source($path)
@@ -65,11 +66,22 @@ class Stub
         return $this;
     }
 
+    public function filter(callable $filter)
+    {
+        $this->filter = $filter;
+
+        return $this;
+    }
+
     protected function handleOutput($path)
     {
         $content = $this->resolveContent($path);
 
         $path = $this->resolvePath($path);
+
+        if ($this->isFiltered($path, $content)) {
+            return false;
+        }
 
         if (is_callable(($this->output))) {
             return ($this->output)($path, $content);
@@ -141,6 +153,12 @@ class Stub
         array_multisort($keys, SORT_DESC, $array);
 
         return $array;
+    }
+
+    protected function isFiltered($path, $content)
+    {
+        return is_callable(($this->filter))
+            && ($this->filter)($path, $content) === false;
     }
 
     protected function files()

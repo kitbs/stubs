@@ -65,7 +65,20 @@ Note: optionally append `.stub` to filenames to avoid IDE errors.
         // Called for each parsed file, instead of storing it
         // Useful for further modifications before you store it
         // or posting to an API like stubbing a github repository
-        
+
+    })->render($variables);
+```
+
+#### Inspect & filter parsed files & content before outputing:
+
+```php
+(new Stub)
+    ->source('stubs/stub-3')
+    ->output('project-name')
+    ->filter(function($path, $content) {
+        // called for each rendered file, BEFORE it is created
+        // return false will prevent the output of that path
+        // returning true or nothing will proceeed normally
     })->render($variables);
 ```
 
@@ -80,7 +93,7 @@ Note: optionally append `.stub` to filenames to avoid IDE errors.
         // Called for each file after the file it is parsed & stored
         // This may be used to log or output the results of the process
         // $success is either true / false depending on the storing result
-        
+
     })->render($variables);
 ```
 
