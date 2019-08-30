@@ -55,6 +55,39 @@ Becomes `{{resource}}` `{{plural}}` `{{lower}}` in the stubs. [View examples](ht
 
 Append `.stub` to filenames to avoid IDE errors, it is removed during render.
 
+## Variable Formatters
+
+Sometimes many variations or formats of the same value are needed.
+
+For that, `render` also accepts a class to compute stub variables:
+
+```php
+(new Stub)
+    ->source('stubs/stub')
+    ->output('projects/project')
+    ->render(new Example([
+        'resource' => 'User'
+    ]));
+```
+```php
+<?php
+
+use Stub\Formatter;
+
+class Example extends Formatter
+{
+    public function upper()
+    {
+        return ucwords($this->resource);
+    }
+}
+```
+
+The array values passed in become available as class properties.
+
+The `public` method names become available as variables: `{{upper}}`.
+
+
 ## Stub Hooks
 
 #### Process a folder and send the files to a callback:
