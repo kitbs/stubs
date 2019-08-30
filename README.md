@@ -6,7 +6,7 @@
 
 A package to create files, folders and content with variables.
 
-Available for PHP applications or as a [CLI tool](https://github.com/awesome-stubs/cli).
+Use this package for PHP applications | [CLI Here](https://github.com/awesome-stubs/cli).
 
 ## Installation
 
@@ -38,8 +38,6 @@ use Stub\Stub;
     ->output('projects/project-2')
     ->render($variables);
 ```
-
-`render()` returns the count of created files
 
 ## Variables
 
@@ -126,8 +124,6 @@ The above code performs the following behavior:
 - Replaces `Users` with `{{name}}`
 - Replaces `user` with `{{lower}}`
 - Appends `.stub` to filenames (Avoids IDE errors)
-
-`create()` returns the count of created files
 
 ---
 
