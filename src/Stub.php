@@ -2,7 +2,7 @@
 
 namespace Stub;
 
-use Stub\Sources\Github;
+use Stub\Sources\GitHub;
 use InvalidArgumentException;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
@@ -10,82 +10,82 @@ use RecursiveDirectoryIterator;
 class Stub
 {
     /**
-     * Path to retrieve stub file(s)
+     * Path to retrieve stub file(s).
      *
      * @var string
      */
     public $source;
 
     /**
-     * Path to output stub file(s)
+     * Path or callback to output stub file(s).
      *
-     * @var mixed
+     * @var string|callable
      */
     public $output;
 
     /**
-     * The successly stubbed file(s)
+     * The successfully stubbed file(s).
      *
-     * @var array
+     * @var string[]
      */
     public $rendered = [];
 
     /**
-     * The data to search / replace
+     * The data to search / replace.
      *
-     * @var array
+     * @var string[]
      */
     public $variables = [];
 
     /**
-     * Callback to prevent file(s)
+     * Callback to prevent file(s) being stubbed.
      *
-     * @var callback
+     * @var callable
      */
     private $filter;
 
     /**
-     * Callback after success
+     * Callback after successful stubbing.
      *
-     * @var callback
+     * @var callable
      */
     private $listener;
 
     /**
-     * Add .stub to when create
+     * Add .stub to filename when creating.
      *
      * @var string
      */
     private $appendFilename;
 
     /**
-     *  If source is temporary
+     *  If source is temporary.
      *
-     * @var boolean
+     * @var bool
      */
     private $staged = false;
 
     /**
-     * The template tag opener
+     * The template tag opener.
      *
      * @var string
      */
     private $openTag = '{{';
 
     /**
-     * The template tag closer
+     * The template tag closer.
      *
      * @var string
      */
     private $closeTag = '}}';
 
     /**
-     * Path to stub's source file(s)
+     * Path to stub's source file(s).
      *
      * @param string $path
-     * @return \Stub\Stub
+     * @return $this
      */
-    public function source($path)
+    public function source(string $path)
     {
         $this->source = $this->getSourcePath($path);
 
@@ -93,10 +93,10 @@ class Stub
     }
 
     /**
-     * Path or callback to output stubs
+     * Path or callback to output stubs.
      *
-     * @param string|callback $output
-     * @return \Stub\Stub
+     * @param string|callable $output
+     * @return $this
      */
     public function output($output)
     {
@@ -106,12 +106,12 @@ class Stub
     }
 
     /**
-     * Compile the source to output
+     * Compile the source to output.
      *
-     * @param array $variables
-     * @return \Stub\Stub
+     * @param string[] $variables
+     * @return $this
      */
-    public function render($variables)
+    public function render(array $variables)
     {
         $this->variables = $variables;
 
@@ -127,10 +127,10 @@ class Stub
     /**
      * Convert files into a stub
      *
-     * @param array $variables
-     * @return \Stub\Stub
+     * @param string[] $variables
+     * @return $this
      */
-    public function create($variables)
+    public function create(array $variables)
     {
         $variables = $this->orderByKeyLength($variables);
 
@@ -147,10 +147,10 @@ class Stub
     }
 
     /**
-     * Register a listen callback
+     * Register a listen callback.
      *
-     * @param callback $listener
-     * @return \Stub\Stub
+     * @param callable $listener
+     * @return $this
      */
     public function listen(callable $listener)
     {
@@ -160,10 +160,10 @@ class Stub
     }
 
     /**
-     * Register a filter callback
+     * Register a filter callback.
      *
-     * @param callback $filter
-     * @return \Stub\Stub
+     * @param callable $filter
+     * @return $this
      */
     public function filter(callable $filter)
     {
@@ -173,12 +173,12 @@ class Stub
     }
 
     /**
-     * Perform conversion on path
+     * Perform conversion on path.
      *
      * @param string $path
      * @return void
      */
-    protected function handleOutput($path)
+    protected function handleOutput($path): void
     {
         $originalPath = $path;
 
@@ -187,11 +187,13 @@ class Stub
         $path = $this->resolvePath($path);
 
         if ($this->isFiltered($path, $content)) {
-            return false;
+            return;
         }
 
         if (is_callable(($this->output))) {
-            return ($this->output)($path, $content);
+            ($this->output)($path, $content);
+
+            return;
         }
 
         $path = $this->getOutputPath($path);
@@ -212,12 +214,12 @@ class Stub
     }
 
     /**
-     * Replace variables in root path
+     * Replace variables in root path.
      *
      * @param string $path
      * @return string
      */
-    protected function resolvePath($path)
+    protected function resolvePath(string $path): string
     {
         $path = str_replace('.stub', '', $path);
         $path = str_replace($this->source, '', $path);
@@ -227,23 +229,23 @@ class Stub
     }
 
     /**
-     * Replace variables in content
+     * Replace variables in content.
      *
      * @param string $path
-     * @return void
+     * @return string
      */
-    protected function resolveContent($path)
+    protected function resolveContent(string $path): string
     {
         return $this->replaceVariables(file_get_contents($path));
     }
 
     /**
-     * Replace known variables
+     * Replace known variables in a string.
      *
      * @param string $content
      * @return string
      */
-    protected function replaceVariables($content = "")
+    protected function replaceVariables(string $content = ''): string
     {
         foreach ($this->variables as $key => $value) {
             $search = "{$this->openTag}{$key}{$this->closeTag}";
@@ -254,12 +256,12 @@ class Stub
     }
 
     /**
-     * Get or create source path
+     * Get or create source path.
      *
      * @param string $path
      * @return string
      */
-    protected function getSourcePath($path)
+    protected function getSourcePath(string $path): string
     {
         if (substr($path, 0, 1) == ':') {
             $path = str_replace(':', '', $path);
@@ -267,7 +269,7 @@ class Stub
         }
 
         if (substr($path, 0, 18) == 'https://github.com') {
-            $path = (new Github($path))->path;
+            $path = (new GitHub($path))->path;
             $this->staged = true;
         }
 
@@ -275,12 +277,12 @@ class Stub
     }
 
     /**
-     * Get or create output path
+     * Get or create output path.
      *
      * @param string $path
      * @return string
      */
-    protected function getOutputPath($path)
+    protected function getOutputPath(string $path): string
     {
         $path = $this->output . DIRECTORY_SEPARATOR . $path;
 
@@ -296,12 +298,12 @@ class Stub
     }
 
     /**
-     * Get last segment of a path
+     * Remove the last segment of a path.
      *
      * @param string $path
      * @return string
      */
-    protected function getDirectory($path)
+    protected function getDirectory(string $path): string
     {
         $segments = explode(DIRECTORY_SEPARATOR, $path);
 
@@ -311,12 +313,12 @@ class Stub
     }
 
     /**
-     * Longest array keys to top
+     * Sort array keys by length.
      *
-     * @param string $path
-     * @return string
+     * @param array $array
+     * @return array
      */
-    protected function orderByKeyLength($array)
+    protected function orderByKeyLength(array $array): array
     {
         $keys = array_map('strlen', array_keys($array));
 
@@ -326,24 +328,24 @@ class Stub
     }
 
     /**
-     * Determine if path fails callback
+     * Determine if path fails callback.
      *
      * @param string $path
      * @param string $content
-     * @return boolean
+     * @return bool
      */
-    protected function isFiltered($path, $content)
+    protected function isFiltered(string $path, string $content): bool
     {
         return is_callable(($this->filter))
             && ($this->filter)($path, $content) === false;
     }
 
     /**
-     * Remove temp source directory
+     * Remove the temp source directory.
      *
      * @return void
      */
-    public function unstage()
+    public function unstage(): void
     {
         if (!$this->staged) {
             return;
@@ -366,11 +368,11 @@ class Stub
     }
 
     /**
-     * Get files from source directory
+     * Get files from the source directory.
      *
      * @return array
      */
-    protected function files()
+    protected function files(): array
     {
         $files = [];
 
@@ -390,13 +392,13 @@ class Stub
     }
 
     /**
-     * Change variable tags
+     * Change variable tags.
      *
      * @param string $open
      * @param string $close
-     * @return \Stub\Stub
+     * @return $this
      */
-    public function usingTags($open, $close)
+    public function usingTags(string $open, string $close)
     {
         $this->openTag = $open;
         $this->closeTag = $close;
@@ -405,12 +407,12 @@ class Stub
     }
 
     /**
-     * Get stub.json values
+     * Get stub.json values.
      *
      * @param string $path
      * @return array
      */
-    public function settings($path)
+    public function settings(string $path): array
     {
         $path = "$path/stub.json";
 

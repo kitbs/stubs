@@ -51,7 +51,7 @@ class Create extends Command
             });
         }
 
-        $count = $stubs->create($render);
+        $count = count($stubs->create($render)->rendered);
 
         if ($count) {
             $o->writeLn('<info>Stub created!</info> <comment>'.$count.'</comment> <info>file(s) created.</info>');

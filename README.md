@@ -16,7 +16,7 @@ composer require dillingham/stubs
 
 ## What is a stub?
 
-A stub is a file or series of files that you wish to replicate on command. Furthermore, the file names, folder structure and content can be made unique with the use of variables. Save your stubs, groups of related files, in folders with a descriptive name and and render them using methods documented below:
+A stub is a file or series of files that you wish to replicate on command. Furthermore, the file names, folder structure and content can be made unique with the use of variables. Save your stubs, groups of related files, in folders with a descriptive name and render them using methods documented below:
 
 
 ![banner)](https://user-images.githubusercontent.com/29180903/63984545-c7a81800-ca99-11e9-882e-fa99bd156389.png)
@@ -66,23 +66,23 @@ Append `.stub` to filenames to avoid IDE errors, it is removed during render.
 
         // Called for each parsed file, instead of storing it
         // Useful for further modifications before you store it
-        // or posting to an API like stubbing a github repository
+        // or posting to an API like stubbing a GitHub repository
 
     })->render($variables);
 ```
 
-#### Inspect & filter parsed files & content before outputing:
+#### Inspect & filter parsed files & content before outputting:
 
 ```php
 (new Stub)
     ->source('stubs/stub-3')
     ->output('project-name')
     ->filter(function($path, $content) {
-    
+
         // called for each rendered file, BEFORE it is created
         // return false will prevent the output of that path
         // returning true or nothing will proceed normally
-        
+
     })->render($variables);
 ```
 
@@ -103,7 +103,7 @@ Append `.stub` to filenames to avoid IDE errors, it is removed during render.
 
 ## Create stubs
 
-Creating stubs by hand is easy and works just as well. But you may find cases where you wish to generate stubs automatcally. Such as, you really like a way a current project is structured and you want the ability to replicate it quickly in the future. That scenario is probably better accompliished via the CLI tool or artisan command, but its available via the class also.
+Creating stubs by hand is easy and works just as well. But you may find cases where you wish to generate stubs automatically. Such as, you really like a way a current project is structured and you want the ability to replicate it quickly in the future. That scenario is probably better accomplished via the CLI tool or artisan command, but its available via the class also.
 
 #### Convert existing files into stubs for future use:
 
