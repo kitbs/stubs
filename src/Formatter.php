@@ -2,6 +2,11 @@
 
 namespace Stub;
 
+use ErrorException;
+use ReflectionClass;
+use ReflectionMethod;
+use BadMethodCallException;
+
 abstract class Formatter
 {
     /**
@@ -20,6 +25,16 @@ abstract class Formatter
     }
 
     /**
+     * Construct a formatter and return the variables.
+     * @param  string[]  $variables
+     * @return string[]
+     */
+    public static function make(array $variables)
+    {
+        return (new static($variables))->all();
+    }
+
+    /**
      * Get a variable value.
      * @param  string $attribute
      * @return string
@@ -29,27 +44,50 @@ abstract class Formatter
         if (isset($this->variables[$attribute])) {
             return $this->variables[$attribute];
         }
+
+        $class = get_called_class();
+
+        throw new ErrorException("Undefined variable: {$class}::\${$attribute}");
+    }
+
+    /**
+     * Get a variable value as a magic method.
+     * @param  string $name
+     * @param array $attributes
+     * @return string
+     */
+    public function __call(string $name, array $attributes)
+    {
+        if (!count($attributes) && isset($this->variables[$name])) {
+            return $this->variables[$name];
+        }
+
+        $class = get_called_class();
+
+        throw new BadMethodCallException("Call to undefined method: {$class}::{$name}()");
     }
 
     /**
      * Compute the variables.
      * @return string[]
      */
-    public function compute()
+    final public function all()
     {
         $this->validate();
 
         $computed = $this->variables;
 
-        $methods = array_diff(
-            get_class_methods(get_called_class()),
-            get_class_methods(get_class())
-        );
+        $class = Formatter::class;
 
-        print_r($methods);die;
+        $methods = (new ReflectionClass(get_called_class()))
+            ->getMethods(ReflectionMethod::IS_PUBLIC);
+
+        $methods = array_filter($methods, function (ReflectionMethod $method) use ($class) {
+            return $method->class != $class && $method->getNumberOfParameters() == 0;
+        });
 
         foreach ($methods as $method) {
-            $computed[$method] = $this->$method();
+            $computed[$method->name] = $method->invoke($this);
         }
 
         return $computed;
@@ -76,6 +114,6 @@ abstract class Formatter
      */
     public function __invoke()
     {
-        return $this->compute();
+        return $this->all();
     }
 }

@@ -35,7 +35,7 @@ class NovaTool extends Formatter
         return explode('/', $this->package)[0];
     }
 
-    protected function title()
+    public function title()
     {
         return MockStr::title(str_replace('-', ' ', $this->name()));
     }

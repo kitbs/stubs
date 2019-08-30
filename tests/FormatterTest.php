@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use ErrorException;
 use InvalidArgumentException;
 
 use Stub\Stub;
@@ -13,7 +14,7 @@ class FormatterTest extends TestCase
     {
         $package = 'test-vendor/test-package';
 
-        $variables = (new Formatters\NovaTool(['package' => $package]))->compute();
+        $variables = (new Formatters\NovaTool(['package' => $package]))->all();
 
         $this->assertEquals([
             'package'          => 'test-vendor/test-package',
@@ -34,20 +35,20 @@ class FormatterTest extends TestCase
 
         $package = 'not-a-package';
 
-        $variables = (new Formatters\NovaTool(['package' => $package]))->compute();
+        $variables = (new Formatters\NovaTool(['package' => $package]))->all();
     }
 
     public function testNovaToolFormatterValidateMissing()
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The `package` variable expects a vendor and name in \'Composer\' format');
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('Undefined variable: Tests\Formatters\NovaTool::$package');
 
-        $variables = (new Formatters\NovaTool([]))->compute();
+        $variables = (new Formatters\NovaTool([]))->all();
     }
 
     public function testFormatterNoAdditional()
     {
-        $variables = (new Formatters\Example1(['name' => 'User']))->compute();
+        $variables = (new Formatters\Example1(['name' => 'User']))->all();
 
         $this->assertEquals([
             'name'         => 'User',
@@ -57,7 +58,7 @@ class FormatterTest extends TestCase
 
     public function testFormatterAdditionalArray()
     {
-        $variables = (new Formatters\Example1(['name' => 'User', 'additional' => 'extra']))->compute();
+        $variables = (new Formatters\Example1(['name' => 'User', 'additional' => 'extra']))->all();
 
         $this->assertEquals([
             'additional'   => 'extra',
@@ -66,9 +67,9 @@ class FormatterTest extends TestCase
         ], $variables);
     }
 
-    public function testFormatterHelperMethods()
+    public function testFormatterStaticMake()
     {
-        $variables = (new Formatters\WithHelpers(['name' => 'User']))->compute();
+        $variables = Formatters\Example1::make(['name' => 'User']);
 
         $this->assertEquals([
             'name'         => 'User',
@@ -76,22 +77,21 @@ class FormatterTest extends TestCase
         ], $variables);
     }
 
-    // public function testFormatterAdditionalFormatter()
-    // {
-    //     $postVariables = (new Formatters\Example2(['name' => 'Post']))->compute();
-    //     $variables = (new Formatters\Example1('User', $postVariables))->compute();
-    //
-    //     $this->assertEquals([
-    //         'name'              => 'User',
-    //         'lower_plural'      => 'users',
-    //         'post_name'         => 'Post',
-    //         'post_lower_plural' => 'posts',
-    //     ], $variables);
-    // }
+    public function testFormatterHelperMethods()
+    {
+        $variables = (new Formatters\WithHelpers(['name' => 'User']))->all();
+
+        $this->assertNotContains('helper', $variables);
+        $this->assertNotContains('helper_argument', $variables);
+
+        $this->assertEquals([
+            'name'         => 'User',
+        ], $variables);
+    }
 
     public function testFormatterStubbing()
     {
-        $variables = (new Formatters\Example1(['name' => 'Blog Post']))->compute();
+        $variables = (new Formatters\Example1(['name' => 'Blog Post']))->all();
 
         $stub = (new Stub)
             ->source(__DIR__.'/stubs/stub-2')
