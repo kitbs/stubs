@@ -5,11 +5,19 @@ namespace Stub\Sources;
 use ZipArchive;
 use RecursiveDirectoryIterator;
 
-class Github
+class GitHub
 {
+    /**
+     * The temporary path.
+     * @var string
+     */
     public $path;
 
-    public function __construct($url)
+    /**
+     * Construct the class.
+     * @param string $url
+     */
+    public function __construct(string $url)
     {
         $this->path = uniqid('stub_');
 
