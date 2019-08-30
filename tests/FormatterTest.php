@@ -46,7 +46,17 @@ class FormatterTest extends TestCase
         $variables = (new Formatters\NovaTool([]))->all();
     }
 
-    public function testFormatterNoAdditional()
+    public function testFormatterInvoke()
+    {
+        $variables = (new Formatters\Example1(['name' => 'User']));
+
+        $this->assertEquals([
+            'name'         => 'User',
+            'lower_plural' => 'users',
+        ], $variables());
+    }
+
+    public function testFormatterBasic()
     {
         $variables = (new Formatters\Example1(['name' => 'User']))->all();
 
@@ -56,7 +66,7 @@ class FormatterTest extends TestCase
         ], $variables);
     }
 
-    public function testFormatterAdditionalArray()
+    public function testFormatterAdditionalVariables()
     {
         $variables = (new Formatters\Example1(['name' => 'User', 'additional' => 'extra']))->all();
 
