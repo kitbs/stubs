@@ -89,7 +89,7 @@ class FormatterTest extends TestCase
         ], $variables);
     }
 
-    public function testFormatterStubbing()
+    public function testFormatterStubbingWithArray()
     {
         $variables = (new Formatters\Example1(['name' => 'Blog Post']))->all();
 
@@ -97,6 +97,26 @@ class FormatterTest extends TestCase
             ->source(__DIR__.'/stubs/stub-2')
             ->output(__DIR__.'/project')
             ->render($variables);
+
+        $count = count($stub->rendered);
+
+        $this->assertFileExists(__DIR__.'/project/views/blog-posts/index.blade.php');
+        $this->assertEquals(
+            '<button>Create Blog Post</button>',
+            file_get_contents(__DIR__.'/project/views/blog-posts/index.blade.php')
+        );
+
+        $this->assertEquals(2, $count);
+    }
+
+    public function testFormatterStubbingWithFormatterObject()
+    {
+        $formatter = new Formatters\Example1(['name' => 'Blog Post']);
+
+        $stub = (new Stub)
+            ->source(__DIR__.'/stubs/stub-2')
+            ->output(__DIR__.'/project')
+            ->render($formatter);
 
         $count = count($stub->rendered);
 
