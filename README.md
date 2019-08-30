@@ -8,10 +8,6 @@ A package to create files, folders and content with variables.
 
 Available for PHP applications or as a [CLI tool](https://github.com/awesome-stubs/cli).
 
-![banner)](https://user-images.githubusercontent.com/29180903/63984545-c7a81800-ca99-11e9-882e-fa99bd156389.png)
-
-[PHP Class](https://github.com/dillingham/stubs#render-stubs) | [Standalone CLI](https://github.com/awesome-stubs/cli) | [Laravel Support](https://github.com/dillingham/stubs#laravel-support)
-
 ## Installation
 
 ```
@@ -21,6 +17,12 @@ composer require dillingham/stubs
 ## What is a stub?
 
 A stub is a file or series of files that you wish to replicate on command. Furthermore, the file names, folder structure and content can be made unique with the use of variables. Save your stubs, groups of related files, in folders with a descriptive name and and render them using methods documented below:
+
+
+![banner)](https://user-images.githubusercontent.com/29180903/63984545-c7a81800-ca99-11e9-882e-fa99bd156389.png)
+---
+[PHP Class](https://github.com/dillingham/stubs#render-stubs) | [Standalone CLI](https://github.com/awesome-stubs/cli) | [Laravel Support](https://github.com/dillingham/stubs#laravel-support)
+
 
 ## Render stubs
 
