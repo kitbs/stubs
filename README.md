@@ -195,3 +195,11 @@ php artisan stub:create source output stub.json
 ```bash
 php artisan stub:quick ./project/one ./project/two
 ```
+
+## Credits
+
+Special thanks to the [contributors](https://github.com/dillingham/stubs/graphs/contributors)
+
+## License
+
+The MIT License (MIT). Please see License File for more information.
