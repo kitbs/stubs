@@ -29,7 +29,7 @@ abstract class Formatter
      * @param  string[]  $variables
      * @return string[]
      */
-    public static function make(array $variables)
+    final public static function make(array $variables)
     {
         return (new static($variables))->all();
     }
@@ -39,7 +39,7 @@ abstract class Formatter
      * @param  string $attribute
      * @return string
      */
-    public function __get(string $attribute)
+    final public function __get(string $attribute)
     {
         return $this->get($attribute);
     }
@@ -50,7 +50,7 @@ abstract class Formatter
      * @param  string $value
      * @return $this
      */
-    public function __set(string $attribute, string $value)
+    final public function __set(string $attribute, string $value)
     {
         return $this->set($attribute, $value);
     }
@@ -61,7 +61,7 @@ abstract class Formatter
      * @param array $attributes
      * @return string
      */
-    public function __call(string $name, array $attributes)
+    final public function __call(string $name, array $attributes)
     {
         if (!count($attributes) && $this->has($name)) {
             return $this->get($name);
@@ -99,6 +99,15 @@ abstract class Formatter
     }
 
     /**
+     * Return the original variables only.
+     * @return string[]
+     */
+    final public function original()
+    {
+        return $this->variables;
+    }
+
+    /**
      * Validate any values passed to the variable set.
      *
      * Override this method in your own class and throw an
@@ -117,7 +126,7 @@ abstract class Formatter
      * Invoke the formatter and compute the variables.
      * @return string[]
      */
-    public function __invoke()
+    final public function __invoke()
     {
         return $this->all();
     }
@@ -128,7 +137,7 @@ abstract class Formatter
      * @param  string $variable
      * @return bool
      */
-    public function has($variable): bool
+    final public function has($variable): bool
     {
         return array_key_exists($variable, $this->variables);
     }
@@ -139,7 +148,7 @@ abstract class Formatter
      * @param string $variable
      * @return string
      */
-    public function get(string $variable)
+    final public function get(string $variable)
     {
         if ($this->has($variable)) {
             return $this->variables[$variable];
@@ -157,7 +166,7 @@ abstract class Formatter
      * @param string $value
      * @return $this
      */
-    public function set(string $variable, string $value)
+    final public function set(string $variable, string $value)
     {
         $this->variables[$variable] = $value;
 
@@ -170,7 +179,7 @@ abstract class Formatter
      * @param string $variable
      * @return $this
      */
-    public function unset(string $variable)
+    final public function unset(string $variable)
     {
         unset($this->variables[$variable]);
 
@@ -183,7 +192,7 @@ abstract class Formatter
      * @param string[] $variables
      * @return $this
      */
-    public function merge(array $variables)
+    final public function merge(array $variables)
     {
         foreach ($variables as $variable => $value) {
             $this->variables[$variable] = $value;
@@ -198,7 +207,7 @@ abstract class Formatter
      * @param string[] $variables
      * @return $this
      */
-    public function replace(array $variables)
+    final public function replace(array $variables)
     {
         $this->variables = [];
 

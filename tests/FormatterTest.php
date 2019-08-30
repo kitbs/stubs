@@ -66,6 +66,15 @@ class FormatterTest extends TestCase
         ], $variables);
     }
 
+    public function testFormatterOriginal()
+    {
+        $variables = (new Formatters\Example1(['name' => 'User']))->original();
+
+        $this->assertEquals([
+            'name' => 'User',
+        ], $variables);
+    }
+
     public function testFormatterAdditionalVariables()
     {
         $variables = (new Formatters\Example1(['name' => 'User', 'additional' => 'extra']))->all();
