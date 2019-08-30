@@ -178,7 +178,7 @@ class Stub
      * @param string $path
      * @return void
      */
-    protected function handleOutput($path)
+    protected function handleOutput($path): void
     {
         $originalPath = $path;
 
@@ -187,11 +187,13 @@ class Stub
         $path = $this->resolvePath($path);
 
         if ($this->isFiltered($path, $content)) {
-            return false;
+            return;
         }
 
         if (is_callable(($this->output))) {
-            return ($this->output)($path, $content);
+            ($this->output)($path, $content);
+
+            return;
         }
 
         $path = $this->getOutputPath($path);
@@ -217,7 +219,7 @@ class Stub
      * @param string $path
      * @return string
      */
-    protected function resolvePath(string $path)
+    protected function resolvePath(string $path): string
     {
         $path = str_replace('.stub', '', $path);
         $path = str_replace($this->source, '', $path);
@@ -232,7 +234,7 @@ class Stub
      * @param string $path
      * @return string
      */
-    protected function resolveContent(string $path)
+    protected function resolveContent(string $path): string
     {
         return $this->replaceVariables(file_get_contents($path));
     }
@@ -243,7 +245,7 @@ class Stub
      * @param string $content
      * @return string
      */
-    protected function replaceVariables(string $content = '')
+    protected function replaceVariables(string $content = ''): string
     {
         foreach ($this->variables as $key => $value) {
             $search = "{$this->openTag}{$key}{$this->closeTag}";
@@ -259,7 +261,7 @@ class Stub
      * @param string $path
      * @return string
      */
-    protected function getSourcePath(string $path)
+    protected function getSourcePath(string $path): string
     {
         if (substr($path, 0, 1) == ':') {
             $path = str_replace(':', '', $path);
@@ -280,7 +282,7 @@ class Stub
      * @param string $path
      * @return string
      */
-    protected function getOutputPath(string $path)
+    protected function getOutputPath(string $path): string
     {
         $path = $this->output . DIRECTORY_SEPARATOR . $path;
 
@@ -301,7 +303,7 @@ class Stub
      * @param string $path
      * @return string
      */
-    protected function getDirectory(string $path)
+    protected function getDirectory(string $path): string
     {
         $segments = explode(DIRECTORY_SEPARATOR, $path);
 
@@ -316,7 +318,7 @@ class Stub
      * @param array $array
      * @return array
      */
-    protected function orderByKeyLength(array $array)
+    protected function orderByKeyLength(array $array): array
     {
         $keys = array_map('strlen', array_keys($array));
 
@@ -332,7 +334,7 @@ class Stub
      * @param string $content
      * @return bool
      */
-    protected function isFiltered(string $path, string $content)
+    protected function isFiltered(string $path, string $content): bool
     {
         return is_callable(($this->filter))
             && ($this->filter)($path, $content) === false;
@@ -343,7 +345,7 @@ class Stub
      *
      * @return void
      */
-    public function unstage()
+    public function unstage(): void
     {
         if (!$this->staged) {
             return;
@@ -370,7 +372,7 @@ class Stub
      *
      * @return array
      */
-    protected function files()
+    protected function files(): array
     {
         $files = [];
 
@@ -410,7 +412,7 @@ class Stub
      * @param string $path
      * @return array
      */
-    public function settings(string $path)
+    public function settings(string $path): array
     {
         $path = "$path/stub.json";
 
