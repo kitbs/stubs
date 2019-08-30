@@ -82,10 +82,12 @@ class FormatterTest extends TestCase
         $variables = (new Formatters\WithHelpers(['name' => 'User']))->all();
 
         $this->assertNotContains('helper', $variables);
-        $this->assertNotContains('helper_argument', $variables);
+        $this->assertNotContains('helper_with_argument', $variables);
 
         $this->assertEquals([
-            'name'         => 'User',
+            'name'                      => 'User',
+            'test_helper'               => '__HELPER__',
+            'test_helper_with_argument' => '__HELPER:ARGUMENT__',
         ], $variables);
     }
 
