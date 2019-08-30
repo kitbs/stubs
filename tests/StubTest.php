@@ -10,7 +10,7 @@ class StubTest extends TestCase
 {
     public function testDirectoryToDirectoryStubbingStub1()
     {
-        $count = (new Stub)
+        $stub = (new Stub)
             ->source(__DIR__.'/stubs/stub-1')
             ->output(__DIR__.'/project')
             ->render(['name' => 'User', 'lower_plural' => 'users']);
@@ -26,12 +26,12 @@ class StubTest extends TestCase
             file_get_contents(__DIR__.'/project/Observers/UserObserver.php')
         );
 
-        $this->assertEquals(4, $count);
+        $this->assertCount(4, $stub->rendered);
     }
 
     public function testDirectoryToDirectoryStubbingStub2()
     {
-        $count = (new Stub)
+        $stub = (new Stub)
             ->source(__DIR__.'/stubs/stub-2')
             ->output(__DIR__.'/project')
             ->render(['name' => 'User', 'lower_plural' => 'users']);
@@ -42,7 +42,7 @@ class StubTest extends TestCase
             file_get_contents(__DIR__.'/project/views/users/index.blade.php')
         );
 
-        $this->assertEquals(2, $count);
+        $this->assertCount(2, $stub->rendered);
     }
 
     public function testDirectoryToCallbackStubbing()
@@ -197,10 +197,11 @@ class StubTest extends TestCase
             ->source('https://github.com/awesome-stubs/skeleton-php')
             ->output('project');
 
+        $source = $stub->source;
         $stub->render(['class' => 'Comment']);
 
-        $this->assertDirectoryNotExists($stub->source);
-
+        $this->assertDirectoryNotExists($source);
+        $this->assertNull($stub->source);
         $this->assertFileExists('project/src/Comment.php');
     }
 
@@ -210,10 +211,11 @@ class StubTest extends TestCase
             ->source(':skeleton-php')
             ->output('project');
 
+        $source = $stub->source;
         $stub->render(['class' => 'Comment']);
 
-        $this->assertDirectoryNotExists($stub->source);
-
+        $this->assertDirectoryNotExists($source);
+        $this->assertNull($stub->source);
         $this->assertFileExists('project/src/Comment.php');
     }
 }

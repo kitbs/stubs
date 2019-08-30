@@ -107,7 +107,9 @@ class Stub
             unlink($originalPath);
         }
 
-        ($success) ? $this->successful++ : null;
+        if ($success) {
+            $this->rendered[] = $path;
+        }
     }
 
     protected function resolvePath($path)
