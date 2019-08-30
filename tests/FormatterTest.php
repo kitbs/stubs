@@ -2,11 +2,11 @@
 
 namespace Tests;
 
-use ErrorException;
-use InvalidArgumentException;
-
 use Stub\Stub;
+use ErrorException;
+
 use Tests\Formatters;
+use InvalidArgumentException;
 
 class FormatterTest extends TestCase
 {
@@ -14,7 +14,7 @@ class FormatterTest extends TestCase
     {
         $package = 'test-vendor/test-package';
 
-        $variables = (new Formatters\NovaTool(['package' => $package]))->all();
+        $variables = (new Formatters\NovaTool(['package' => $package]))->format();
 
         $this->assertEquals([
             'package'          => 'test-vendor/test-package',
@@ -35,7 +35,7 @@ class FormatterTest extends TestCase
 
         $package = 'not-a-package';
 
-        $variables = (new Formatters\NovaTool(['package' => $package]))->all();
+        $variables = (new Formatters\NovaTool(['package' => $package]))->format();
     }
 
     public function testNovaToolFormatterValidateMissing()
@@ -43,22 +43,12 @@ class FormatterTest extends TestCase
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Undefined variable: Tests\Formatters\NovaTool::$package');
 
-        $variables = (new Formatters\NovaTool([]))->all();
-    }
-
-    public function testFormatterInvoke()
-    {
-        $variables = (new Formatters\Example1(['name' => 'User']));
-
-        $this->assertEquals([
-            'name'         => 'User',
-            'lower_plural' => 'users',
-        ], $variables());
+        $variables = (new Formatters\NovaTool([]))->format();
     }
 
     public function testFormatterBasic()
     {
-        $variables = (new Formatters\Example1(['name' => 'User']))->all();
+        $variables = (new Formatters\Example1(['name' => 'User']))->format();
 
         $this->assertEquals([
             'name'         => 'User',
@@ -77,7 +67,7 @@ class FormatterTest extends TestCase
 
     public function testFormatterAdditionalVariables()
     {
-        $variables = (new Formatters\Example1(['name' => 'User', 'additional' => 'extra']))->all();
+        $variables = (new Formatters\Example1(['name' => 'User', 'additional' => 'extra']))->format();
 
         $this->assertEquals([
             'additional'   => 'extra',
@@ -98,7 +88,7 @@ class FormatterTest extends TestCase
 
     public function testFormatterHelperMethods()
     {
-        $variables = (new Formatters\WithHelpers(['name' => 'User']))->all();
+        $variables = (new Formatters\WithHelpers(['name' => 'User']))->format();
 
         $this->assertNotContains('helper', $variables);
         $this->assertNotContains('helper_with_argument', $variables);
@@ -112,7 +102,7 @@ class FormatterTest extends TestCase
 
     public function testFormatterStubbingWithArray()
     {
-        $variables = (new Formatters\Example1(['name' => 'Blog Post']))->all();
+        $variables = (new Formatters\Example1(['name' => 'Blog Post']))->format();
 
         $stub = (new Stub)
             ->source(__DIR__.'/stubs/stub-2')
@@ -170,82 +160,18 @@ class FormatterTest extends TestCase
         // Computed variable cannot be retrieved with get()
         try {
             $this->assertEquals('users', $formatter->get('lower_plural'));
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->assertInstanceOf(\ErrorException::class, $e, 'Failed asserting that `->get(\'lower_plural\')` does not exist.');
         }
 
         // Computed variable cannot be retrieved with __get()
         try {
             $this->assertEquals('users', $formatter->lower_plural);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->assertInstanceOf(\ErrorException::class, $e, 'Failed asserting that `->lower_plural` does not exist.');
         }
 
         // Will return computed variable
         $this->assertEquals('users', $formatter->lower_plural(), 'Failed asserting that `->lower_plural()` returns expected value');
-    }
-
-    public function testFormatterVariableSet()
-    {
-        $formatter = new Formatters\Example2(['name' => 'Users']);
-
-        $this->assertFalse($formatter->has('package'), 'Failed asserting that variable \'package\' does not exist.');
-
-        $formatter->set('package', 'users-package');
-
-        $this->assertTrue($formatter->has('package'), 'Failed asserting that variable \'package\' exists.');
-
-        $variables = $formatter->all();
-
-        $this->assertEquals([
-            'name'          => 'Users',
-            'lower_plural'  => 'users',
-            'singular_name' => 'User',
-            'package'       => 'users-package',
-        ], $variables);
-    }
-
-    public function testFormatterVariableUnset()
-    {
-        $formatter = new Formatters\Example2(['name' => 'Users', 'package' => 'users-package']);
-
-        $this->assertTrue($formatter->has('package'), 'Failed asserting that variable \'package\' exists.');
-
-        $formatter->unset('package');
-
-        $this->assertFalse($formatter->has('package'), 'Failed asserting that variable \'package\' does not exist.');
-
-        $variables = $formatter->all();
-
-        $this->assertEquals([
-            'name'          => 'Users',
-            'lower_plural'  => 'users',
-            'singular_name' => 'User',
-        ], $variables);
-    }
-
-    public function testFormatterVariableMerge()
-    {
-        $formatter = new Formatters\Example1(['name' => 'User']);
-
-        $this->assertFalse($formatter->has('package'), 'Failed asserting that variable \'package\' does not exist.');
-
-        $formatter->merge([
-            'package'    => 'users-package',
-            'additional' => 'extra',
-        ]);
-
-        $this->assertTrue($formatter->has('package'), 'Failed asserting that variable \'package\' exists.');
-
-        $variables = $formatter->all();
-
-        $this->assertEquals([
-            'name'         => 'User',
-            'lower_plural' => 'users',
-            'package'      => 'users-package',
-            'additional'   => 'extra',
-        ], $variables);
     }
 }

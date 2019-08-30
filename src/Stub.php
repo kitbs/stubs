@@ -432,9 +432,8 @@ class Stub
     protected function getVariableValues($variables)
     {
         if ($variables instanceof Formatter) {
-            return $variables->all();
-        }
-        elseif (is_array($variables)) {
+            return $variables->format();
+        } elseif (is_array($variables)) {
             return $variables;
         }
 

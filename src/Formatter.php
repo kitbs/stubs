@@ -21,7 +21,7 @@ abstract class Formatter
      */
     public function __construct(array $variables)
     {
-        $this->merge($variables);
+        $this->variables = $variables;
     }
 
     /**
@@ -31,7 +31,7 @@ abstract class Formatter
      */
     final public static function make(array $variables)
     {
-        return (new static($variables))->all();
+        return (new static($variables))->format();
     }
 
     /**
@@ -42,17 +42,6 @@ abstract class Formatter
     final public function __get(string $attribute)
     {
         return $this->get($attribute);
-    }
-
-    /**
-     * Set a variable value.
-     * @param  string $attribute
-     * @param  string $value
-     * @return $this
-     */
-    final public function __set(string $attribute, string $value)
-    {
-        return $this->set($attribute, $value);
     }
 
     /**
@@ -76,7 +65,7 @@ abstract class Formatter
      * Compute the variables.
      * @return string[]
      */
-    final public function all()
+    final public function format()
     {
         $this->validate();
 
@@ -123,15 +112,6 @@ abstract class Formatter
     }
 
     /**
-     * Invoke the formatter and compute the variables.
-     * @return string[]
-     */
-    final public function __invoke()
-    {
-        return $this->all();
-    }
-
-    /**
      * Whether the variable exists.
      *
      * @param  string $variable
@@ -157,60 +137,5 @@ abstract class Formatter
         $class = get_called_class();
 
         throw new ErrorException("Undefined variable: {$class}::\${$variable}");
-    }
-
-    /**
-     * Set a variable.
-     *
-     * @param string $variable
-     * @param string $value
-     * @return $this
-     */
-    final public function set(string $variable, string $value)
-    {
-        $this->variables[$variable] = $value;
-
-        return $this;
-    }
-
-    /**
-     * Remove a variable.
-     *
-     * @param string $variable
-     * @return $this
-     */
-    final public function unset(string $variable)
-    {
-        unset($this->variables[$variable]);
-
-        return $this;
-    }
-
-    /**
-     * Merge variables into the existing variables.
-     *
-     * @param string[] $variables
-     * @return $this
-     */
-    final public function merge(array $variables)
-    {
-        foreach ($variables as $variable => $value) {
-            $this->variables[$variable] = $value;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Replace existing variables with new variables.
-     *
-     * @param string[] $variables
-     * @return $this
-     */
-    final public function replace(array $variables)
-    {
-        $this->variables = [];
-
-        return $this->merge($variables);
     }
 }
