@@ -53,7 +53,9 @@ In `render()`, variables are declared as `'variable' => 'value'`
 
 Becomes `{{resource}}` `{{plural}}` `{{lower}}` in the stubs. [View examples](https://github.com/dillingham/stubs/tree/master/tests/stubs).
 
-Note: optionally append `.stub` to filenames to avoid IDE errors.
+**What about IDE errors?**
+
+Append `.stub` to filenames to avoid IDE errors, it is removed during render.
 
 ## Stub Hooks
 
