@@ -22,7 +22,7 @@ class Stub
      * @var mixed
      */
     public $output;
-    public $successful = 0;
+
     /**
      * The successly stubbed file(s)
      *
@@ -87,9 +87,7 @@ class Stub
      */
     public function source($path)
     {
-        $path = $this->getSource($path);
-
-        $this->source = $path;
+        $this->source = $this->getSourcePath($path);
 
         return $this;
     }
@@ -100,8 +98,9 @@ class Stub
      * @param string|callback $output
      * @return \Stub\Stub
      */
+    public function output($output)
     {
-        $this->output = $path;
+        $this->output = $output;
 
         return $this;
     }
@@ -122,7 +121,7 @@ class Stub
 
         $this->unstage();
 
-        return $this->successful;
+        return $this;
     }
 
     /**
@@ -258,6 +257,21 @@ class Stub
      * @param string $path
      * @return string
      */
+    protected function getSourcePath($path)
+    {
+        if (substr($path, 0, 1) == ':') {
+            $path = str_replace(':', '', $path);
+            $path = "https://github.com/awesome-stubs/$path";
+        }
+
+        if (substr($path, 0, 18) == 'https://github.com') {
+            $path = (new Github($path))->path;
+            $this->staged = true;
+        }
+
+        return $path;
+    }
+
     /**
      * Get or create output path
      *
@@ -345,6 +359,8 @@ class Stub
         }
 
         rmdir($this->source);
+
+        $this->source = null;
     }
 
     /**
