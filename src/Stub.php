@@ -130,7 +130,7 @@ class Stub
      * @param string[]|\Stub\Formatter $variables
      * @return $this
      */
-    public function create($variables)
+    public function create(array $variables)
     {
         $variables = $this->orderByKeyLength($this->getVariableValues($variables));
 
