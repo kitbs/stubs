@@ -6,9 +6,9 @@
 
 A package to create files, folders and content with variables.
 
-Available in PHP for applications or as a [CLI productivity tool](https://github.com/awesome-stubs/cli).
+Available for PHP applications or a [CLI productivity tool](https://github.com/awesome-stubs/cli).
 
-![banner](https://user-images.githubusercontent.com/29180903/63984450-4fd9ed80-ca99-11e9-9110-cddc316821fb.png)
+![banner)](https://user-images.githubusercontent.com/29180903/63984545-c7a81800-ca99-11e9-882e-fa99bd156389.png)
 
 [PHP Class](https://github.com/dillingham/stubs#render-stubs) | [Standalone CLI](https://github.com/awesome-stubs/cli) | [Laravel Support](https://github.com/dillingham/stubs#laravel-support)
 
