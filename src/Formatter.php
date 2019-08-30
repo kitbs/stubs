@@ -191,4 +191,17 @@ abstract class Formatter
 
         return $this;
     }
+
+    /**
+     * Replace existing variables with new variables.
+     *
+     * @param string[] $variables
+     * @return $this
+     */
+    public function replace(array $variables)
+    {
+        $this->variables = [];
+
+        return $this->merge($variables);
+    }
 }
