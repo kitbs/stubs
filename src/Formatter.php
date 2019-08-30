@@ -13,7 +13,7 @@ abstract class Formatter
      * The base variables.
      * @var string[]
      */
-    public $variables;
+    protected $variables = [];
 
     /**
      * Construct the formatter.
@@ -21,7 +21,7 @@ abstract class Formatter
      */
     public function __construct(array $variables)
     {
-        $this->variables = $variables;
+        $this->merge($variables);
     }
 
     /**
@@ -41,13 +41,18 @@ abstract class Formatter
      */
     public function __get(string $attribute)
     {
-        if (isset($this->variables[$attribute])) {
-            return $this->variables[$attribute];
-        }
+        return $this->get($attribute);
+    }
 
-        $class = get_called_class();
-
-        throw new ErrorException("Undefined variable: {$class}::\${$attribute}");
+    /**
+     * Set a variable value.
+     * @param  string $attribute
+     * @param  string $value
+     * @return $this
+     */
+    public function __set(string $attribute, string $value)
+    {
+        return $this->set($attribute, $value);
     }
 
     /**
@@ -58,8 +63,8 @@ abstract class Formatter
      */
     public function __call(string $name, array $attributes)
     {
-        if (!count($attributes) && isset($this->variables[$name])) {
-            return $this->variables[$name];
+        if (!count($attributes) && $this->has($name)) {
+            return $this->get($name);
         }
 
         $class = get_called_class();
@@ -115,5 +120,75 @@ abstract class Formatter
     public function __invoke()
     {
         return $this->all();
+    }
+
+    /**
+     * Whether the variable exists.
+     *
+     * @param  string $variable
+     * @return bool
+     */
+    public function has($variable): bool
+    {
+        return array_key_exists($variable, $this->variables);
+    }
+
+    /**
+     * Get a variable.
+     *
+     * @param string $variable
+     * @return string
+     */
+    public function get(string $variable)
+    {
+        if ($this->has($variable)) {
+            return $this->variables[$variable];
+        }
+
+        $class = get_called_class();
+
+        throw new ErrorException("Undefined variable: {$class}::\${$variable}");
+    }
+
+    /**
+     * Set a variable.
+     *
+     * @param string $variable
+     * @param string $value
+     * @return $this
+     */
+    public function set(string $variable, string $value)
+    {
+        $this->variables[$variable] = $value;
+
+        return $this;
+    }
+
+    /**
+     * Remove a variable.
+     *
+     * @param string $variable
+     * @return $this
+     */
+    public function unset(string $variable)
+    {
+        unset($this->variables[$variable]);
+
+        return $this;
+    }
+
+    /**
+     * Merge variables into the existing variables.
+     *
+     * @param string[] $variables
+     * @return $this
+     */
+    public function merge(array $variables)
+    {
+        foreach ($variables as $variable => $value) {
+            $this->variables[$variable] = $value;
+        }
+
+        return $this;
     }
 }
