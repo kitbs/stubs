@@ -39,7 +39,7 @@ use Stub\Stub;
 
 `render()` returns the count of created files
 
-#### Variables
+## Variables
 
 In `render()`, variables are declared as `'variable' => 'value'`
 
@@ -54,6 +54,8 @@ In `render()`, variables are declared as `'variable' => 'value'`
 Becomes `{{resource}}` `{{plural}}` `{{lower}}` in the stubs. [View examples](https://github.com/dillingham/stubs/tree/master/tests/stubs).
 
 Note: optionally append `.stub` to filenames to avoid IDE errors.
+
+## Stub Hooks
 
 #### Process a folder and send the files to a callback:
 
