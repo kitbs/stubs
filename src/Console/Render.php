@@ -68,7 +68,7 @@ class Render extends Command
             });
         }
 
-        $count = $stubs->render($render);
+        $count = count($stubs->render($render)->rendered);
 
         if ($count) {
             $o->writeLn('<info>Stub rendered!</info> <comment>'.$count.'</comment> <info>file(s) rendered.</info>');
