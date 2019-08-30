@@ -26,14 +26,14 @@ class Stub
     /**
      * The successfully stubbed file(s).
      *
-     * @var array
+     * @var string[]
      */
     public $rendered = [];
 
     /**
      * The data to search / replace.
      *
-     * @var array
+     * @var string[]
      */
     public $variables = [];
 
@@ -108,7 +108,7 @@ class Stub
     /**
      * Compile the source to output.
      *
-     * @param array $variables
+     * @param string[] $variables
      * @return $this
      */
     public function render(array $variables)
@@ -127,10 +127,10 @@ class Stub
     /**
      * Convert files into a stub
      *
-     * @param array $variables
+     * @param string[] $variables
      * @return $this
      */
-    public function create($variables)
+    public function create(array $variables)
     {
         $variables = $this->orderByKeyLength($variables);
 
