@@ -108,12 +108,12 @@ class Stub
     /**
      * Compile the source to output.
      *
-     * @param string[] $variables
+     * @param string[]|\Stub\Formatter $variables
      * @return $this
      */
-    public function render(array $variables)
+    public function render($variables)
     {
-        $this->variables = $variables;
+        $this->variables = $this->getVariableValues($variables);
 
         foreach ($this->files() as $file) {
             $this->handleOutput($file);
@@ -127,12 +127,12 @@ class Stub
     /**
      * Convert files into a stub
      *
-     * @param string[] $variables
+     * @param string[]|\Stub\Formatter $variables
      * @return $this
      */
     public function create(array $variables)
     {
-        $variables = $this->orderByKeyLength($variables);
+        $variables = $this->orderByKeyLength($this->getVariableValues($variables));
 
         foreach ($variables as $key => $value) {
             unset($variables[$key]);
@@ -421,5 +421,23 @@ class Stub
         }
 
         throw new InvalidArgumentException("$path does not contain a stub.json");
+    }
+
+    /**
+     * Get values from variables or formatter.
+     *
+     * @param string[]|\Stub\Formatter $variables
+     * @return string[]
+     */
+    protected function getVariableValues($variables)
+    {
+        if ($variables instanceof Formatter) {
+            return $variables->all();
+        }
+        elseif (is_array($variables)) {
+            return $variables;
+        }
+
+        throw new InvalidArgumentException('Variables must be an array or instance of \Stub\Formatter');
     }
 }
