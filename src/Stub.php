@@ -9,16 +9,75 @@ use RecursiveDirectoryIterator;
 
 class Stub
 {
+    /**
+     * Path to retrieve stub file(s)
+     *
+     * @var string
+     */
     public $source;
+
+    /**
+     * Path to output stub file(s)
+     *
+     * @var mixed
+     */
     public $output;
     public $successful = 0;
+    /**
+     * The successly stubbed file(s)
+     *
+     * @var array
+     */
+    public $rendered = [];
+
+    /**
+     * The data to search / replace
+     *
+     * @var array
+     */
     public $variables = [];
-    public $openTag = '{{';
-    public $closeTag = '}}';
-    public $appendFilename;
-    public $filter;
-    public $listener;
-    public $staged = false;
+
+    /**
+     * Callback to prevent file(s)
+     *
+     * @var callback
+     */
+    private $filter;
+
+    /**
+     * Callback after success
+     *
+     * @var callback
+     */
+    private $listener;
+
+    /**
+     * Add .stub to when create
+     *
+     * @var string
+     */
+    private $appendFilename;
+
+    /**
+     *  If source is temporary
+     *
+     * @var boolean
+     */
+    private $staged = false;
+
+    /**
+     * The template tag opener
+     *
+     * @var string
+     */
+    private $openTag = '{{';
+
+    /**
+     * The template tag closer
+     *
+     * @var string
+     */
+    private $closeTag = '}}';
 
     public function source($path)
     {
